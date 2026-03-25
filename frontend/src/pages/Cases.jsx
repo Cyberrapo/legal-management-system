@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import API from '../api/axios'
 import toast from 'react-hot-toast'
+import DocumentViewer from '../components/DocumentViewer'
 import styles from './Cases.module.css'
 
 const empty = { title: '', description: '', clientName: '', caseType: 'Civil', status: 'Open' }
-
 const badgeClass = { Open: styles.badgeOpen, 'In Progress': styles.badgeProgress, Closed: styles.badgeClosed }
 
 export default function Cases() {
@@ -12,7 +12,9 @@ export default function Cases() {
   const [form, setForm] = useState(empty)
   const [showForm, setShowForm] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [file, setFile] = useState(null)
+  const [files, setFiles] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [expandedCase, setExpandedCase] = useState(null)
 
   const fetchCases = async () => {
     try {
@@ -25,22 +27,26 @@ export default function Cases() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setUploading(true)
     try {
       if (editId) {
         await API.put(`/cases/${editId}`, form)
         toast.success('Case updated!')
       } else {
         const { data } = await API.post('/cases', form)
-        if (file) {
+        if (files.length > 0) {
           const fd = new FormData()
-          fd.append('document', file)
+          files.forEach(f => fd.append('documents', f))
           await API.post(`/documents/${data._id}/upload`, fd)
+          toast.success(`Case created with ${files.length} document(s)!`)
+        } else {
+          toast.success('Case created!')
         }
-        toast.success('Case created!')
       }
-      setForm(empty); setShowForm(false); setEditId(null); setFile(null)
+      setForm(empty); setShowForm(false); setEditId(null); setFiles([])
       fetchCases()
     } catch { toast.error('Something went wrong') }
+    setUploading(false)
   }
 
   const handleDelete = async (id) => {
@@ -50,10 +56,25 @@ export default function Cases() {
     fetchCases()
   }
 
+  const handleDeleteDoc = async (caseId, docId) => {
+    if (!confirm('Delete this document?')) return
+    try {
+      await API.delete(`/documents/${caseId}/doc/${docId}`)
+      toast.success('Document deleted')
+      fetchCases()
+    } catch { toast.error('Failed to delete document') }
+  }
+
   const handleEdit = (c) => {
     setForm({ title: c.title, description: c.description, clientName: c.clientName, caseType: c.caseType, status: c.status })
     setEditId(c._id); setShowForm(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleFileChange = (e) => {
+    const selected = Array.from(e.target.files)
+    setFiles(selected)
+    toast.success(`${selected.length} file(s) selected`)
   }
 
   return (
@@ -64,7 +85,7 @@ export default function Cases() {
           <p className={styles.subtitle}>{cases.length} total cases</p>
         </div>
         <button className={`${styles.btn} ${showForm ? styles.btnCancel : ''}`}
-          onClick={() => { setShowForm(!showForm); setEditId(null); setForm(empty) }}>
+          onClick={() => { setShowForm(!showForm); setEditId(null); setForm(empty); setFiles([]) }}>
           {showForm ? '✕ Cancel' : '+ New Case'}
         </button>
       </div>
@@ -95,22 +116,32 @@ export default function Cases() {
           </div>
           <div className={`${styles.inputGroup} ${styles.formFull}`}>
             <label>Description</label>
-            <textarea placeholder="Brief description of the case..." value={form.description}
+            <textarea placeholder="Brief description of the case..."
+              value={form.description}
               onChange={e => setForm({...form, description: e.target.value})} />
           </div>
           {!editId && (
             <div className={`${styles.inputGroup} ${styles.formFull}`}>
-              <label>Upload Document (optional)</label>
-              <input type="file" onChange={e => setFile(e.target.files[0])} accept=".pdf,.jpg,.png,.docx" />
+              <label>Upload Documents (select multiple)</label>
+              <input type="file" multiple
+                onChange={handleFileChange}
+                accept=".pdf,.jpg,.jpeg,.png,.docx" />
+              {files.length > 0 && (
+                <div className={styles.filePreview}>
+                  {files.map((f, i) => (
+                    <span key={i} className={styles.fileTag}>📎 {f.name}</span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           <div className={styles.formActions}>
             <button type="button" className={`${styles.btn} ${styles.btnCancel}`}
-              onClick={() => { setShowForm(false); setEditId(null); setForm(empty) }}>
+              onClick={() => { setShowForm(false); setEditId(null); setForm(empty); setFiles([]) }}>
               Cancel
             </button>
-            <button type="submit" className={styles.btn}>
-              {editId ? '✓ Update Case' : '+ Create Case'}
+            <button type="submit" className={styles.btn} disabled={uploading}>
+              {uploading ? 'Saving...' : editId ? '✓ Update Case' : '+ Create Case'}
             </button>
           </div>
         </form>
@@ -141,18 +172,32 @@ export default function Cases() {
               </div>
             </div>
             {c.description && <p className={styles.desc}>{c.description}</p>}
+
             {c.documents?.length > 0 && (
-              <div className={styles.docs}>
-                {c.documents.map((d, i) => (
-                  <a key={i} href={d.url} target="_blank" rel="noreferrer" className={styles.docLink}>
-                    📎 Document {i + 1}
-                  </a>
-                ))}
+              <div className={styles.docsSection}>
+                <button className={styles.docsToggle}
+                  onClick={() => setExpandedCase(expandedCase === c._id ? null : c._id)}>
+                  📎 {c.documents.length} Document{c.documents.length > 1 ? 's' : ''}
+                  {expandedCase === c._id ? ' ▲' : ' ▼'}
+                </button>
+                {expandedCase === c._id && (
+                  <div className={styles.docsList}>
+                    {c.documents.map(doc => (
+                      <DocumentViewer
+                        key={doc._id}
+                        doc={doc}
+                        onDelete={(docId) => handleDeleteDoc(c._id, docId)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
+
             <div className={styles.actions}>
               <button onClick={() => handleEdit(c)} className={styles.actionBtn}>✏️ Edit</button>
-              <button onClick={() => handleDelete(c._id)} className={`${styles.actionBtn} ${styles.actionDel}`}>🗑️ Delete</button>
+              <button onClick={() => handleDelete(c._id)}
+                className={`${styles.actionBtn} ${styles.actionDel}`}>🗑️ Delete</button>
             </div>
           </div>
         ))}

@@ -270,3 +270,45 @@
   .list { grid-template-columns: 1fr; }
   .header { flex-direction: column; align-items: flex-start; }
 }
+
+.filePreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .fileTag {
+    background: rgba(108, 99, 255, 0.15);
+    color: var(--primary-light);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  
+  .docsSection {
+    margin-bottom: 14px;
+  }
+  
+  .docsToggle {
+    background: rgba(79, 172, 254, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79, 172, 254, 0.2);
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: var(--transition);
+    margin-bottom: 10px;
+  }
+  
+  .docsToggle:hover { background: rgba(79, 172, 254, 0.2); }
+  
+  .docsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: fadeIn 0.3s ease;
+  }

@@ -1,4 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+
+const documentSchema = new mongoose.Schema({
+  url:        { type: String, required: true },
+  publicId:   { type: String, required: true },
+  name:       { type: String, required: true },
+  fileType:   { type: String, default: 'application/octet-stream' },
+  uploadedAt: { type: Date, default: Date.now }
+})
 
 const caseSchema = new mongoose.Schema({
   title:       { type: String, required: true },
@@ -6,8 +14,9 @@ const caseSchema = new mongoose.Schema({
   clientName:  { type: String, required: true },
   caseType:    { type: String, enum: ['Civil', 'Criminal', 'Family', 'Corporate', 'Other'], default: 'Other' },
   status:      { type: String, enum: ['Open', 'In Progress', 'Closed'], default: 'Open' },
+  hearingDate: { type: Date },
   lawyer:      { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  documents:   [{ url: String, publicId: String, name: String }],
-}, { timestamps: true });
+  documents:   [documentSchema],
+}, { timestamps: true })
 
-module.exports = mongoose.model('Case', caseSchema);
+module.exports = mongoose.model('Case', caseSchema)
