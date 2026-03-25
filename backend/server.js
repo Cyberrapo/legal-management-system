@@ -7,7 +7,7 @@ console.log('API KEY loaded:', process.env.ANTHROPIC_API_KEY ? 'YES' : 'NO')
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://legal-management-system.vercel.app'],
   credentials: true
 }))
 app.use(express.json());
