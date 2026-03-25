@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import Cases from './pages/Cases'
 import Appointments from './pages/Appointments'
 import Chatbot from './pages/Chatbot'
+import Hearings from './pages/Hearings'
 import Layout from './components/Layout'
 
 const PrivateRoute = ({ children }) => {
@@ -24,6 +25,7 @@ function AppRoutes() {
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="cases" element={<Cases />} />
+          <Route path="hearings" element={<Hearings />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="chat" element={<Chatbot />} />
         </Route>

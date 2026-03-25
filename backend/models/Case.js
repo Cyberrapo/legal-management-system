@@ -9,14 +9,16 @@ const documentSchema = new mongoose.Schema({
 })
 
 const caseSchema = new mongoose.Schema({
-  title:       { type: String, required: true },
-  description: { type: String },
-  clientName:  { type: String, required: true },
-  caseType:    { type: String, enum: ['Civil', 'Criminal', 'Family', 'Corporate', 'Other'], default: 'Other' },
-  status:      { type: String, enum: ['Open', 'In Progress', 'Closed'], default: 'Open' },
-  hearingDate: { type: Date },
-  lawyer:      { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  documents:   [documentSchema],
+  title:        { type: String, required: true },
+  description:  { type: String },
+  clientName:   { type: String, required: true },
+  caseType:     { type: String, enum: ['Civil', 'Criminal', 'Family', 'Corporate', 'Other'], default: 'Other' },
+  status:       { type: String, enum: ['Open', 'In Progress', 'Closed'], default: 'Open' },
+  hearingDate:  { type: Date },
+  hearingTime:  { type: String },
+  hearingNotes: { type: String },
+  lawyer:       { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  documents:    [documentSchema],
 }, { timestamps: true })
 
 module.exports = mongoose.model('Case', caseSchema)

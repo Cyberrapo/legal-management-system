@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useNotifications } from '../hooks/useNotifications'
+import HearingBadge from './HearingBadge'
 import styles from './Layout.module.css'
 
 export default function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  useNotifications()
 
   const handleLogout = () => {
     logout()
@@ -17,7 +20,8 @@ export default function Layout() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.menuBtn} onClick={() => setSidebarOpen(!sidebarOpen)}>
+      <button className={styles.menuBtn}
+        onClick={() => setSidebarOpen(!sidebarOpen)}>
         {sidebarOpen ? '✕' : '☰'}
       </button>
 
@@ -47,6 +51,12 @@ export default function Layout() {
           <NavLink to="/cases" onClick={closeSidebar}
             className={({ isActive }) => isActive ? styles.active : ''}>
             <span className={styles.navIcon}>📁</span> Cases
+          </NavLink>
+          <NavLink to="/hearings" onClick={closeSidebar}
+            className={({ isActive }) => isActive ? styles.active : ''}>
+            <span className={styles.navIcon}>🔔</span>
+            <span>Hearings</span>
+            <HearingBadge />
           </NavLink>
           <NavLink to="/appointments" onClick={closeSidebar}
             className={({ isActive }) => isActive ? styles.active : ''}>
