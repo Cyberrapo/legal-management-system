@@ -1,0 +1,77 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+}
+
+.title {
+    font-size: 24px;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+}
+
+.chatBox {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+}
+
+.userMsg {
+    align-self: flex-end;
+    background: #e94560;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 70%;
+    font-size: 14px;
+}
+
+.botMsg {
+    align-self: flex-start;
+    background: #f0f2f5;
+    color: #333;
+    padding: 10px 16px;
+    border-radius: 18px 18px 18px 4px;
+    max-width: 75%;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.inputArea {
+    display: flex;
+    gap: 10px;
+}
+
+.inputArea input {
+    flex: 1;
+    padding: 13px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.inputArea input:focus {
+    border-color: #e94560;
+}
+
+.inputArea button {
+    background: #e94560;
+    color: white;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.inputArea button:disabled {
+    opacity: 0.6;
+}
