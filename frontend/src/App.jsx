@@ -8,6 +8,7 @@ import Cases from './pages/Cases'
 import Appointments from './pages/Appointments'
 import Chatbot from './pages/Chatbot'
 import Hearings from './pages/Hearings'
+import DocumentGenerator from './pages/DocumentGenerator'
 import Layout from './components/Layout'
 
 const PrivateRoute = ({ children }) => {
@@ -28,6 +29,7 @@ function AppRoutes() {
           <Route path="hearings" element={<Hearings />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="chat" element={<Chatbot />} />
+          <Route path="documents" element={<DocumentGenerator />} />
         </Route>
       </Routes>
     </BrowserRouter>

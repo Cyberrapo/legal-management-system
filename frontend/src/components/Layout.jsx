@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import { useNotifications } from '../hooks/useNotifications'
-import HearingBadge from './HearingBadge'
-import styles from './Layout.module.css'
+import { useState } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../hooks/useNotifications";
+import HearingBadge from "./HearingBadge";
+import styles from "./Layout.module.css";
 
 export default function Layout() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  useNotifications()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  useNotifications();
 
   const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
+    logout();
+    navigate("/login");
+  };
 
-  const closeSidebar = () => setSidebarOpen(false)
+  const closeSidebar = () => setSidebarOpen(false);
 
   return (
     <div className={styles.container}>
-      <button className={styles.menuBtn}
-        onClick={() => setSidebarOpen(!sidebarOpen)}>
-        {sidebarOpen ? '✕' : '☰'}
+      <button
+        className={styles.menuBtn}
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? "✕" : "☰"}
       </button>
 
-      <div className={sidebarOpen ? styles.overlayVisible : styles.overlay}
-        onClick={closeSidebar} />
+      <div
+        className={sidebarOpen ? styles.overlayVisible : styles.overlay}
+        onClick={closeSidebar}
+      />
 
-      <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
+      <aside
+        className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ""}`}
+      >
         <div className={styles.logo}>⚖️ LegalApp</div>
 
         <div className={styles.userCard}>
@@ -44,27 +50,50 @@ export default function Layout() {
         <span className={styles.navLabel}>Main Menu</span>
 
         <nav className={styles.nav}>
-          <NavLink to="/" end onClick={closeSidebar}
-            className={({ isActive }) => isActive ? styles.active : ''}>
+          <NavLink
+            to="/"
+            end
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <span className={styles.navIcon}>📊</span> Dashboard
           </NavLink>
-          <NavLink to="/cases" onClick={closeSidebar}
-            className={({ isActive }) => isActive ? styles.active : ''}>
+          <NavLink
+            to="/cases"
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <span className={styles.navIcon}>📁</span> Cases
           </NavLink>
-          <NavLink to="/hearings" onClick={closeSidebar}
-            className={({ isActive }) => isActive ? styles.active : ''}>
+          <NavLink
+            to="/hearings"
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <span className={styles.navIcon}>🔔</span>
             <span>Hearings</span>
             <HearingBadge />
           </NavLink>
-          <NavLink to="/appointments" onClick={closeSidebar}
-            className={({ isActive }) => isActive ? styles.active : ''}>
+          <NavLink
+            to="/appointments"
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <span className={styles.navIcon}>📅</span> Appointments
           </NavLink>
-          <NavLink to="/chat" onClick={closeSidebar}
-            className={({ isActive }) => isActive ? styles.active : ''}>
+          <NavLink
+            to="/chat"
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <span className={styles.navIcon}>🤖</span> AI Assistant
+          </NavLink>
+          <NavLink
+            to="/documents"
+            onClick={closeSidebar}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
+            <span className={styles.navIcon}>📄</span> Doc Generator
           </NavLink>
         </nav>
 
@@ -77,5 +106,5 @@ export default function Layout() {
         <Outlet />
       </main>
     </div>
-  )
+  );
 }
