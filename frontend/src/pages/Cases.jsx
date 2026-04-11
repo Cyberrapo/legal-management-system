@@ -2,10 +2,11 @@ import { useEffect, useState, useRef } from 'react'
 import {
   Plus, X, Edit2, Trash2, Download, Eye, FileText,
   Image, File, ChevronDown, ChevronUp, Upload,
-  Paperclip, Check, FolderOpen
+  Paperclip, Check, FolderOpen, Clock
 } from 'lucide-react'
 import API from '../api/axios'
 import toast from 'react-hot-toast'
+import CaseTimeline from '../components/CaseTimeline'
 import styles from './Cases.module.css'
 
 const empty = {
@@ -36,6 +37,7 @@ export default function Cases() {
   const [files, setFiles] = useState([])
   const [uploading, setUploading] = useState(false)
   const [expandedCase, setExpandedCase] = useState(null)
+  const [expandedTimeline, setExpandedTimeline] = useState(null)
   const [viewingDoc, setViewingDoc] = useState(null)
   const [deletingDoc, setDeletingDoc] = useState(null)
   const fileRef = useRef()
@@ -143,22 +145,36 @@ export default function Cases() {
     setFiles([])
   }
 
+  const toggleDocs = (id) => setExpandedCase(prev => prev === id ? null : id)
+  const toggleTimeline = (id) => setExpandedTimeline(prev => prev === id ? null : id)
+
   return (
     <div className="animate-fade">
+
+      {/* ── PAGE HEADER ── */}
       <div className="page-header">
         <div>
           <h2 className="page-title">Cases</h2>
-          <p className="page-subtitle">{cases.length} case{cases.length !== 1 ? 's' : ''} total</p>
+          <p className="page-subtitle">
+            {cases.length} case{cases.length !== 1 ? 's' : ''} total
+          </p>
         </div>
-        <button className="btn-primary" onClick={() => showForm ? resetForm() : setShowForm(true)}>
-          {showForm ? <><X size={15} /> Cancel</> : <><Plus size={15} /> New Case</>}
+        <button className="btn-primary"
+          onClick={() => showForm ? resetForm() : setShowForm(true)}>
+          {showForm
+            ? <><X size={15} /> Cancel</>
+            : <><Plus size={15} /> New Case</>
+          }
         </button>
       </div>
 
+      {/* ── FORM ── */}
       {showForm && (
         <div className={`card ${styles.formCard} animate-scale`}>
           <div className={styles.formHeader}>
-            <h3 className={styles.formTitle}>{editId ? 'Edit Case' : 'New Case'}</h3>
+            <h3 className={styles.formTitle}>
+              {editId ? '✏️ Edit Case' : '📁 New Case'}
+            </h3>
             <button className="icon-btn" onClick={resetForm}>
               <X size={16} />
             </button>
@@ -166,18 +182,28 @@ export default function Cases() {
 
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
+
+              {/* Title */}
               <div>
                 <label className="form-label">Case Title *</label>
-                <input className="input" placeholder="e.g. Property Dispute"
+                <input className="input"
+                  placeholder="e.g. Property Dispute — Sharma vs State"
                   value={form.title}
-                  onChange={e => setForm({...form, title: e.target.value})} required />
+                  onChange={e => setForm({...form, title: e.target.value})}
+                  required />
               </div>
+
+              {/* Client */}
               <div>
                 <label className="form-label">Client Name *</label>
-                <input className="input" placeholder="Full name of client"
+                <input className="input"
+                  placeholder="Full name of client"
                   value={form.clientName}
-                  onChange={e => setForm({...form, clientName: e.target.value})} required />
+                  onChange={e => setForm({...form, clientName: e.target.value})}
+                  required />
               </div>
+
+              {/* Case Type */}
               <div>
                 <label className="form-label">Case Type</label>
                 <select className="input" value={form.caseType}
@@ -187,6 +213,8 @@ export default function Cases() {
                   )}
                 </select>
               </div>
+
+              {/* Status */}
               <div>
                 <label className="form-label">Status</label>
                 <select className="input" value={form.status}
@@ -196,52 +224,75 @@ export default function Cases() {
                   )}
                 </select>
               </div>
+
+              {/* Description */}
               <div className="form-full">
                 <label className="form-label">Description</label>
-                <textarea className="input" style={{height:'80px', resize:'vertical'}}
+                <textarea className="input"
+                  style={{height:'80px', resize:'vertical'}}
                   placeholder="Brief case description..."
                   value={form.description}
                   onChange={e => setForm({...form, description: e.target.value})} />
               </div>
+
+              {/* Hearing Date */}
               <div>
                 <label className="form-label">Hearing Date</label>
-                <input className="input" type="date" value={form.hearingDate}
+                <input className="input" type="date"
+                  value={form.hearingDate}
                   onChange={e => setForm({...form, hearingDate: e.target.value})} />
               </div>
+
+              {/* Hearing Time */}
               <div>
                 <label className="form-label">Hearing Time</label>
-                <input className="input" type="time" value={form.hearingTime}
+                <input className="input" type="time"
+                  value={form.hearingTime}
                   onChange={e => setForm({...form, hearingTime: e.target.value})} />
               </div>
+
+              {/* Hearing Notes */}
               <div className="form-full">
                 <label className="form-label">Hearing Notes</label>
-                <input className="input" placeholder="e.g. Court Room 3, Judge Sharma"
+                <input className="input"
+                  placeholder="e.g. Court Room 3, Judge Sharma"
                   value={form.hearingNotes}
                   onChange={e => setForm({...form, hearingNotes: e.target.value})} />
               </div>
 
+              {/* Document Upload */}
               <div className="form-full">
                 <label className="form-label">
                   {editId ? 'Add More Documents' : 'Upload Documents'}
                 </label>
-                <div className={styles.uploadZone} onClick={() => fileRef.current?.click()}>
+                <div className={styles.uploadZone}
+                  onClick={() => fileRef.current?.click()}>
                   <Upload size={22} className={styles.uploadIcon} />
                   <p className={styles.uploadText}>Click to browse files</p>
-                  <p className={styles.uploadHint}>PDF, JPG, PNG, DOCX — add one by one or multiple</p>
-                  <input ref={fileRef} type="file" multiple
+                  <p className={styles.uploadHint}>
+                    PDF, JPG, PNG, DOCX — add one by one or multiple at once
+                  </p>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    multiple
                     style={{display:'none'}}
                     onChange={handleAddFile}
-                    accept=".pdf,.jpg,.jpeg,.png,.docx" />
+                    accept=".pdf,.jpg,.jpeg,.png,.docx"
+                  />
                 </div>
 
                 {files.length > 0 && (
                   <div className={styles.fileList}>
                     {files.map((f, i) => (
                       <div key={i} className={styles.fileItem}>
-                        <Paperclip size={13} />
+                        <Paperclip size={13} className={styles.fileIcon} />
                         <span className={styles.fileName}>{f.name}</span>
-                        <span className={styles.fileSize}>{(f.size / 1024).toFixed(0)} KB</span>
-                        <button type="button" className="icon-btn danger"
+                        <span className={styles.fileSize}>
+                          {(f.size / 1024).toFixed(0)} KB
+                        </span>
+                        <button type="button"
+                          className="icon-btn danger"
                           style={{width:26, height:26}}
                           onClick={() => removeFile(i)}>
                           <X size={12} />
@@ -253,6 +304,7 @@ export default function Cases() {
               </div>
             </div>
 
+            {/* Form Actions */}
             <div className={styles.formActions}>
               <button type="button" className="btn-ghost" onClick={resetForm}>
                 Cancel
@@ -271,19 +323,23 @@ export default function Cases() {
         </div>
       )}
 
+      {/* ── CASES GRID ── */}
       <div className={styles.caseGrid}>
         {cases.length === 0 ? (
           <div className="empty-state" style={{gridColumn:'1/-1'}}>
-            <FolderOpen size={48} strokeWidth={1} className="empty-icon" />
+            <FolderOpen size={52} strokeWidth={1} className="empty-icon" />
             <p className="empty-title">No cases yet</p>
             <p className="empty-subtitle">Click "+ New Case" to get started</p>
           </div>
         ) : cases.map(c => (
           <div key={c._id} className={`card ${styles.caseCard} animate-fade`}>
+
+            {/* Card Top Row — Status + Actions */}
             <div className={styles.cardTopRow}>
               <span className={statusBadge[c.status]}>{c.status}</span>
               <div className={styles.cardActions}>
-                <button className="icon-btn" title="Edit case" onClick={() => handleEdit(c)}>
+                <button className="icon-btn" title="Edit case"
+                  onClick={() => handleEdit(c)}>
                   <Edit2 size={14} />
                 </button>
                 <button className="icon-btn danger" title="Delete case"
@@ -293,8 +349,10 @@ export default function Cases() {
               </div>
             </div>
 
+            {/* Case Title */}
             <h3 className={styles.caseTitle}>{c.title}</h3>
 
+            {/* Meta Tags */}
             <div className={styles.caseMeta}>
               <span className={styles.metaItem}>👤 {c.clientName}</span>
               <span className={styles.metaItem}>⚖️ {c.caseType}</span>
@@ -309,16 +367,25 @@ export default function Cases() {
               )}
             </div>
 
+            {/* Description */}
             {c.description && (
               <p className={styles.caseDesc}>{c.description}</p>
             )}
 
+            {/* Hearing Notes */}
+            {c.hearingNotes && (
+              <p className={styles.hearingNotes}>📝 {c.hearingNotes}</p>
+            )}
+
+            {/* ── DOCUMENTS ── */}
             {c.documents?.length > 0 && (
               <div className={styles.docsSection}>
                 <button className={styles.docsToggle}
-                  onClick={() => setExpandedCase(expandedCase === c._id ? null : c._id)}>
+                  onClick={() => toggleDocs(c._id)}>
                   <Paperclip size={13} />
-                  <span>{c.documents.length} Document{c.documents.length > 1 ? 's' : ''}</span>
+                  <span>
+                    {c.documents.length} Document{c.documents.length > 1 ? 's' : ''}
+                  </span>
                   {expandedCase === c._id
                     ? <ChevronUp size={13} />
                     : <ChevronDown size={13} />
@@ -330,17 +397,22 @@ export default function Cases() {
                     {c.documents.map(doc => (
                       <div key={doc._id} className={styles.docItem}>
                         <span className={styles.docIcon}>{getFileIcon(doc)}</span>
-                        <span className={styles.docName}>{doc.name || 'Document'}</span>
+                        <span className={styles.docName}>
+                          {doc.name || 'Document'}
+                        </span>
                         <div className={styles.docActions}>
-                          <button className="icon-btn info" title="View"
+                          <button className="icon-btn info" title="View document"
                             onClick={() => setViewingDoc(doc)}>
                             <Eye size={13} />
                           </button>
-                          <a href={doc.url} download target="_blank" rel="noreferrer"
-                            className="icon-btn success" title="Download">
+                          <a href={doc.url} download
+                            target="_blank" rel="noreferrer"
+                            className="icon-btn success"
+                            title="Download document">
                             <Download size={13} />
                           </a>
-                          <button className="icon-btn danger" title="Delete"
+                          <button className="icon-btn danger"
+                            title="Delete document"
                             disabled={deletingDoc === doc._id}
                             onClick={() => handleDeleteDoc(c._id, doc._id)}>
                             <Trash2 size={13} />
@@ -352,30 +424,75 @@ export default function Cases() {
                 )}
               </div>
             )}
+
+            {/* ── TIMELINE ── */}
+            <div className={styles.timelineSection}>
+              <button className={styles.timelineToggle}
+                onClick={() => toggleTimeline(c._id)}>
+                <Clock size={13} />
+                <span>
+                  Timeline · {c.timeline?.length || 0} event{c.timeline?.length !== 1 ? 's' : ''}
+                </span>
+                {expandedTimeline === c._id
+                  ? <ChevronUp size={13} />
+                  : <ChevronDown size={13} />
+                }
+              </button>
+
+              {expandedTimeline === c._id && (
+                <CaseTimeline
+                  caseId={c._id}
+                  timeline={c.timeline || []}
+                  onUpdate={fetchCases}
+                />
+              )}
+            </div>
+
           </div>
         ))}
       </div>
 
+      {/* ── DOCUMENT VIEWER MODAL ── */}
       {viewingDoc && (
         <div className={styles.modal} onClick={() => setViewingDoc(null)}>
           <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <span className={styles.modalTitle}>{viewingDoc.name}</span>
-              <button className="icon-btn danger" onClick={() => setViewingDoc(null)}>
-                <X size={16} />
-              </button>
+              <div className={styles.modalTitleRow}>
+                {getFileIcon(viewingDoc)}
+                <span className={styles.modalTitle}>{viewingDoc.name}</span>
+              </div>
+              <div className={styles.modalHeaderActions}>
+                <a href={viewingDoc.url} download target="_blank"
+                  rel="noreferrer" className="icon-btn success" title="Download">
+                  <Download size={15} />
+                </a>
+                <button className="icon-btn danger"
+                  onClick={() => setViewingDoc(null)}>
+                  <X size={15} />
+                </button>
+              </div>
             </div>
             <div className={styles.modalBody}>
-              {viewingDoc.fileType === 'application/pdf' || viewingDoc.name?.endsWith('.pdf') ? (
-                <iframe src={viewingDoc.url} title={viewingDoc.name} className={styles.pdfFrame} />
+              {viewingDoc.fileType === 'application/pdf' ||
+               viewingDoc.name?.endsWith('.pdf') ? (
+                <iframe
+                  src={viewingDoc.url}
+                  title={viewingDoc.name}
+                  className={styles.pdfFrame}
+                />
               ) : viewingDoc.fileType?.startsWith('image/') ||
                 viewingDoc.name?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-                <img src={viewingDoc.url} alt={viewingDoc.name} className={styles.imgPreview} />
+                <img
+                  src={viewingDoc.url}
+                  alt={viewingDoc.name}
+                  className={styles.imgPreview}
+                />
               ) : (
                 <div className={styles.unsupported}>
-                  <File size={48} strokeWidth={1} />
+                  <File size={52} strokeWidth={1} />
                   <p>Preview not available for this file type</p>
-                  <a href={viewingDoc.url} target="_blank" rel="noreferrer" className="btn-primary">
+                  <a href={viewingDoc.url} target="_blank"
+                    rel="noreferrer" className="btn-primary">
                     <Download size={14} /> Open File
                   </a>
                 </div>
@@ -384,6 +501,7 @@ export default function Cases() {
           </div>
         </div>
       )}
+
     </div>
   )
 }
