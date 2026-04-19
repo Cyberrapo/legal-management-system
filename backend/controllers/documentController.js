@@ -5,7 +5,6 @@ const uploadDocuments = async (req, res) => {
   try {
     const c = await Case.findById(req.params.caseId)
     if (!c) return res.status(404).json({ message: 'Case not found' })
-
     if (!req.files || req.files.length === 0)
       return res.status(400).json({ message: 'No files uploaded' })
 
@@ -17,7 +16,16 @@ const uploadDocuments = async (req, res) => {
       uploadedAt: new Date()
     }))
 
+    const docNames = req.files.map(f => f.originalname).join(', ')
+
     c.documents.push(...newDocs)
+    c.timeline.push({
+      action: 'Documents Uploaded',
+      description: `${req.files.length} document(s) uploaded: ${docNames}`,
+      type: 'document',
+      performedBy: req.user?.name || 'Lawyer'
+    })
+
     await c.save()
     res.json(c)
   } catch (err) {
@@ -34,8 +42,22 @@ const deleteDocument = async (req, res) => {
     const doc = c.documents.id(req.params.docId)
     if (!doc) return res.status(404).json({ message: 'Document not found' })
 
-    await cloudinary.uploader.destroy(doc.publicId)
+    const docName = doc.name
+
+    try {
+      await cloudinary.uploader.destroy(doc.publicId)
+    } catch (e) {
+      console.log('Cloudinary delete skipped:', e.message)
+    }
+
     c.documents.pull({ _id: req.params.docId })
+    c.timeline.push({
+      action: 'Document Removed',
+      description: `Document "${docName}" was removed`,
+      type: 'document',
+      performedBy: req.user?.name || 'Lawyer'
+    })
+
     await c.save()
     res.json({ message: 'Document deleted', case: c })
   } catch (err) {

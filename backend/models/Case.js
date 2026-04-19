@@ -8,6 +8,14 @@ const documentSchema = new mongoose.Schema({
   uploadedAt: { type: Date, default: Date.now }
 })
 
+const timelineSchema = new mongoose.Schema({
+  action:      { type: String, required: true },
+  description: { type: String },
+  type:        { type: String, enum: ['created', 'updated', 'document', 'hearing', 'status', 'note'], default: 'updated' },
+  performedBy: { type: String },
+  timestamp:   { type: Date, default: Date.now }
+})
+
 const caseSchema = new mongoose.Schema({
   title:        { type: String, required: true },
   description:  { type: String },
@@ -19,6 +27,7 @@ const caseSchema = new mongoose.Schema({
   hearingNotes: { type: String },
   lawyer:       { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   documents:    [documentSchema],
+  timeline:     [timelineSchema],
 }, { timestamps: true })
 
 module.exports = mongoose.model('Case', caseSchema)

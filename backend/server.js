@@ -23,6 +23,7 @@ app.use('/api/cases', require('./routes/caseRoutes'))
 app.use('/api/appointments', require('./routes/appointmentRoutes'))
 app.use('/api/documents', require('./routes/documentRoutes'))
 app.use('/api/chat', require('./routes/chatRoutes'))
+app.use('/api/tasks', require('./routes/taskRoutes'))
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
