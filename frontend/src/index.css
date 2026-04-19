@@ -49,16 +49,18 @@ body {
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-hover: 0 16px 48px rgba(108, 99, 255, 0.25);
   --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-sidebar: none;
 
   --radius: 16px;
   --radius-sm: 10px;
   --radius-xs: 6px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Sidebar specific - Dark theme */
   --sidebar-bg: #0f0f20;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-text: rgba(255, 255, 255, 0.65);
-  --sidebar-active: rgba(255, 255, 255, 0.15);
+  --sidebar-active: rgba(108, 99, 255, 0.25);
 }
 
 /* ── LIGHT THEME ── */
@@ -88,16 +90,18 @@ body {
   --shadow: 0 8px 32px rgba(91, 82, 240, 0.1);
   --shadow-hover: 0 16px 48px rgba(91, 82, 240, 0.2);
   --shadow-card: 0 2px 12px rgba(91, 82, 240, 0.08);
+  --shadow-sidebar: 0 4px 20px rgba(0, 0, 0, 0.05);
 
   --radius: 16px;
   --radius-sm: 10px;
   --radius-xs: 6px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --sidebar-bg: #1a1a3e;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-text: rgba(255, 255, 255, 0.65);
-  --sidebar-active: rgba(255, 255, 255, 0.15);
+  /* Sidebar specific - Light theme (FIXED) */
+  --sidebar-bg: #ffffff;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-text: #4a4a6a;
+  --sidebar-active: rgba(91, 82, 240, 0.1);
 }
 
 /* ── SCROLLBAR ── */

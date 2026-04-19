@@ -251,8 +251,6 @@
     padding: 14px 16px 16px;
 }
 
-.summaryItem {}
-
 .summaryBar {
     display: flex;
     justify-content: space-between;
