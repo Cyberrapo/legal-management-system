@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@300;400;500;600;700&display=swap');
 
 *,
 *::before,
@@ -8,13 +8,20 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  transition: background 0.3s ease, color 0.3s ease;
+html {
+  color-scheme: dark;
 }
 
-/* ── DARK THEME ── */
+body {
+  font-family: 'Inter', 'Noto Sans Kannada', sans-serif;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── DARK THEME (default) ── */
 :root,
 [data-theme="dark"] {
   --primary: #6c63ff;
@@ -48,8 +55,10 @@ body {
   --radius-xs: 6px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --sidebar-bg: #0f0f20;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-text: rgba(255, 255, 255, 0.65);
+  --sidebar-active: rgba(255, 255, 255, 0.15);
 }
 
 /* ── LIGHT THEME ── */
@@ -80,15 +89,18 @@ body {
   --shadow-hover: 0 16px 48px rgba(91, 82, 240, 0.2);
   --shadow-card: 0 2px 12px rgba(91, 82, 240, 0.08);
 
-  --glass: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(91, 82, 240, 0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --sidebar-bg: #1a1a3e;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-text: rgba(255, 255, 255, 0.65);
+  --sidebar-active: rgba(255, 255, 255, 0.15);
 }
 
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -101,9 +113,9 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: 3px;
-  opacity: 0.5;
 }
 
+/* ── ANIMATIONS ── */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -116,18 +128,6 @@ body {
   }
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -137,28 +137,6 @@ body {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4);
-  }
-
-  50% {
-    box-shadow: 0 0 0 8px rgba(108, 99, 255, 0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-
-  100% {
-    background-position: 200% 0;
   }
 }
 
@@ -185,15 +163,11 @@ body {
   animation: fadeIn 0.4s ease forwards;
 }
 
-.animate-slide {
-  animation: slideInLeft 0.3s ease forwards;
-}
-
 .animate-scale {
   animation: scaleIn 0.3s ease forwards;
 }
 
-/* ── SHARED BUTTON STYLES ── */
+/* ── SHARED BUTTONS ── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -311,7 +285,7 @@ body {
 .card:hover {
   border-color: var(--border-hover);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 }
 
 /* ── INPUT ── */
@@ -337,7 +311,12 @@ body {
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
 }
 
-/* ── BADGE ── */
+.input option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+/* ── BADGES ── */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -379,6 +358,12 @@ body {
 }
 
 .badge-cancelled {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--danger);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.badge-urgent {
   background: rgba(255, 107, 107, 0.15);
   color: var(--danger);
   border: 1px solid rgba(255, 107, 107, 0.2);
@@ -433,7 +418,7 @@ body {
   color: var(--text-muted);
 }
 
-/* ── FORM ── */
+/* ── FORM GRID ── */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
