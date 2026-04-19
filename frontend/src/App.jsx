@@ -24,8 +24,11 @@ function AppRoutes() {
     <BrowserRouter>
       <Toaster position="top-right" toastOptions={{
         style: {
-          background: 'var(--bg-card)', color: 'var(--text-primary)',
-          border: '1px solid var(--border)', borderRadius: '10px', fontSize: '14px',
+          background: 'var(--bg-card)',
+          color: 'var(--text-primary)',
+          border: '1px solid var(--border)',
+          borderRadius: '10px',
+          fontSize: '14px',
         }
       }}/>
       <Routes>

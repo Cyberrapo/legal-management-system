@@ -24,7 +24,7 @@ import styles from './Layout.module.css'
 export default function Layout() {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   useNotifications()
@@ -33,17 +33,17 @@ export default function Layout() {
   const closeSidebar = () => setSidebarOpen(false)
 
   const mainNav = [
-    { to: '/',            icon: <DashboardIcon sx={{fontSize:17}}/>,    label: t('nav_dashboard'),    end: true },
-    { to: '/cases',       icon: <FolderIcon sx={{fontSize:17}}/>,       label: t('nav_cases') },
-    { to: '/hearings',    icon: <GavelIcon sx={{fontSize:17}}/>,        label: t('nav_hearings'),     badge: true },
-    { to: '/calendar',    icon: <CalendarMonthIcon sx={{fontSize:17}}/>,label: 'Calendar' },
-    { to: '/appointments',icon: <EventNoteIcon sx={{fontSize:17}}/>,    label: t('nav_appointments') },
-    { to: '/tasks',       icon: <CheckBoxIcon sx={{fontSize:17}}/>,     label: 'Tasks' },
+    { to: '/',             icon: <DashboardIcon sx={{fontSize:17}}/>,     label: 'Dashboard',     end: true  },
+    { to: '/cases',        icon: <FolderIcon sx={{fontSize:17}}/>,        label: 'Cases'                     },
+    { to: '/hearings',     icon: <GavelIcon sx={{fontSize:17}}/>,         label: 'Hearings',      badge: true },
+    { to: '/calendar',     icon: <CalendarMonthIcon sx={{fontSize:17}}/>, label: 'Calendar'                  },
+    { to: '/appointments', icon: <EventNoteIcon sx={{fontSize:17}}/>,     label: 'Appointments'              },
+    { to: '/tasks',        icon: <CheckBoxIcon sx={{fontSize:17}}/>,      label: 'Tasks'                     },
   ]
 
   const toolsNav = [
-    { to: '/chat',      icon: <SmartToyIcon sx={{fontSize:17}}/>, label: t('nav_ai_assistant') },
-    { to: '/documents', icon: <ArticleIcon sx={{fontSize:17}}/>,  label: t('nav_doc_generator') },
+    { to: '/chat',      icon: <SmartToyIcon sx={{fontSize:17}}/>, label: 'AI Assistant'   },
+    { to: '/documents', icon: <ArticleIcon sx={{fontSize:17}}/>,  label: 'Doc Generator'  },
   ]
 
   return (
@@ -55,12 +55,14 @@ export default function Layout() {
       {sidebarOpen && <div className={styles.overlay} onClick={closeSidebar} />}
 
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
+
+        {/* LOGO */}
         <div className={styles.logoRow}>
           <div className={styles.logo}>
             <BalanceIcon sx={{fontSize:20}} className={styles.logoIcon} />
             <span>LegalPro</span>
           </div>
-          <button className={styles.themeBtn} onClick={toggleTheme}>
+          <button className={styles.themeBtn} onClick={toggleTheme} title="Toggle theme">
             {theme === 'dark'
               ? <LightModeIcon sx={{fontSize:15}}/>
               : <DarkModeIcon sx={{fontSize:15}}/>
@@ -68,19 +70,29 @@ export default function Layout() {
           </button>
         </div>
 
+        {/* USER CARD */}
         <div className={styles.userCard}>
-          <div className={styles.avatar}>{user?.name?.charAt(0).toUpperCase()}</div>
+          <div className={styles.avatar}>
+            {user?.name?.charAt(0).toUpperCase()}
+          </div>
           <div className={styles.userInfo}>
             <div className={styles.username}>{user?.name}</div>
-            <div className={styles.userRole}>{t('advocate')}</div>
+            <div className={styles.userRole}>Advocate</div>
           </div>
         </div>
 
-        <p className={styles.navLabel}>{t('nav_main')}</p>
+        {/* MAIN NAV */}
+        <p className={styles.navLabel}>Main Menu</p>
         <nav className={styles.nav}>
           {mainNav.map(({ to, icon, label, end, badge }) => (
-            <NavLink key={to} to={to} end={end} onClick={closeSidebar}
-              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                `${styles.navLink} ${isActive ? styles.active : ''}`
+              }>
               <span className={styles.navIcon}>{icon}</span>
               <span>{label}</span>
               {badge && <HearingBadge />}
@@ -88,23 +100,31 @@ export default function Layout() {
           ))}
         </nav>
 
-        <p className={styles.navLabel}>{t('nav_tools')}</p>
+        {/* TOOLS NAV */}
+        <p className={styles.navLabel}>Tools</p>
         <nav className={styles.nav}>
           {toolsNav.map(({ to, icon, label }) => (
-            <NavLink key={to} to={to} onClick={closeSidebar}
-              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
+            <NavLink
+              key={to}
+              to={to}
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                `${styles.navLink} ${isActive ? styles.active : ''}`
+              }>
               <span className={styles.navIcon}>{icon}</span>
               <span>{label}</span>
             </NavLink>
           ))}
         </nav>
 
+        {/* SIGN OUT */}
         <div className={styles.sidebarBottom}>
           <button onClick={handleLogout} className={styles.logout}>
             <LogoutIcon sx={{fontSize:15}}/>
-            <span>{t('nav_signout')}</span>
+            <span>Sign Out</span>
           </button>
         </div>
+
       </aside>
 
       <main className={styles.main}>
