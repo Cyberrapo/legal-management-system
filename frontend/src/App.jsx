@@ -10,6 +10,8 @@ import Appointments from './pages/Appointments'
 import Chatbot from './pages/Chatbot'
 import Hearings from './pages/Hearings'
 import DocumentGenerator from './pages/DocumentGenerator'
+import Tasks from './pages/Tasks'
+import CalendarPage from './pages/CalendarPage'
 import Layout from './components/Layout'
 
 const PrivateRoute = ({ children }) => {
@@ -20,18 +22,12 @@ const PrivateRoute = ({ children }) => {
 function AppRoutes() {
   return (
     <BrowserRouter>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: 'var(--bg-card)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border)',
-            borderRadius: '10px',
-            fontSize: '14px',
-          }
-        }}
-      />
+      <Toaster position="top-right" toastOptions={{
+        style: {
+          background: 'var(--bg-card)', color: 'var(--text-primary)',
+          border: '1px solid var(--border)', borderRadius: '10px', fontSize: '14px',
+        }
+      }}/>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -39,7 +35,9 @@ function AppRoutes() {
           <Route index element={<Dashboard />} />
           <Route path="cases" element={<Cases />} />
           <Route path="hearings" element={<Hearings />} />
+          <Route path="calendar" element={<CalendarPage />} />
           <Route path="appointments" element={<Appointments />} />
+          <Route path="tasks" element={<Tasks />} />
           <Route path="chat" element={<Chatbot />} />
           <Route path="documents" element={<DocumentGenerator />} />
         </Route>

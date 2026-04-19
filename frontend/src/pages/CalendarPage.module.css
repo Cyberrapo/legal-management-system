@@ -1,0 +1,256 @@
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 18px;
+    align-items: start;
+  }
+  
+  /* CALENDAR CARD */
+  .calendarCard { overflow: hidden; }
+  
+  .calHeader {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  
+  .monthTitle {
+    font-size: 16px; font-weight: 600;
+    color: var(--text-primary); letter-spacing: -0.3px;
+  }
+  
+  .dayNames {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 8px 12px 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .dayName {
+    text-align: center; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted); padding: 4px 0;
+  }
+  
+  .daysGrid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 8px 12px 12px; gap: 2px;
+  }
+  
+  .dayCell {
+    min-height: 70px; padding: 6px 4px 4px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    transition: var(--transition);
+    cursor: default;
+  }
+  
+  .dayCellActive {
+    cursor: pointer;
+  }
+  .dayCellActive:hover {
+    background: var(--bg-hover);
+    border-color: var(--border);
+  }
+  
+  .dayCellOther { opacity: 0.3; pointer-events: none; }
+  
+  .dayCellToday .dayNum {
+    background: var(--primary);
+    color: white !important;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  
+  .dayCellSelected {
+    background: rgba(108,99,255,0.08);
+    border-color: rgba(108,99,255,0.3) !important;
+  }
+  
+  .dayNum {
+    font-size: 13px; font-weight: 500;
+    color: var(--text-primary);
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  
+  .cellDots {
+    display: flex; flex-wrap: wrap;
+    gap: 3px; justify-content: center; align-items: center;
+  }
+  
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .moreCount {
+    font-size: 9px; font-weight: 700;
+    color: var(--text-muted);
+  }
+  
+  /* LEGEND */
+  .legend {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    padding: 10px 20px; border-top: 1px solid var(--border);
+    justify-content: center;
+  }
+  
+  .legendItem {
+    display: flex; align-items: center; gap: 5px;
+  }
+  
+  .legendDot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  
+  .legendLabel {
+    font-size: 11px; font-weight: 500; color: var(--text-muted);
+  }
+  
+  /* RIGHT PANEL */
+  .rightPanel {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  
+  /* SELECTED DATE */
+  .selectedCard { overflow: hidden; }
+  
+  .selectedHeader {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .selectedTitle {
+    font-size: 12px; font-weight: 600;
+    color: var(--text-primary); line-height: 1.4;
+  }
+  
+  .selectedCount {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 20px; flex-shrink: 0;
+  }
+  
+  .noEvents {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    padding: 24px; color: var(--text-muted); font-size: 12px;
+  }
+  
+  .eventList {
+    display: flex; flex-direction: column; gap: 8px; padding: 12px;
+  }
+  
+  .eventItem {
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    border-left: 3px solid transparent;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  .eventItemTop {
+    display: flex; align-items: center;
+    gap: 6px; margin-bottom: 3px; flex-wrap: wrap;
+  }
+  
+  .eventIcon { display: flex; align-items: center; flex-shrink: 0; }
+  
+  .eventTitle {
+    font-size: 12px; font-weight: 600;
+    color: var(--text-primary); flex: 1;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  
+  .eventTime {
+    font-size: 11px; font-weight: 600;
+    color: var(--text-muted); flex-shrink: 0;
+  }
+  
+  .eventSubtitle {
+    font-size: 11px; color: var(--text-muted);
+    margin-left: 19px; margin-top: 1px;
+  }
+  
+  /* UPCOMING EVENTS */
+  .upcomingCard { overflow: hidden; }
+  
+  .upcomingHeader {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .upcomingTitle {
+    font-size: 13px; font-weight: 600; color: var(--text-primary);
+  }
+  
+  .upcomingCount {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 20px;
+  }
+  
+  .upcomingList { display: flex; flex-direction: column; }
+  
+  .upcomingItem {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: var(--transition);
+  }
+  .upcomingItem:last-child { border-bottom: none; }
+  .upcomingItem:hover { background: var(--bg-hover); }
+  
+  .upcomingDate {
+    width: 38px; height: 42px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .upcomingDay {
+    font-size: 15px; font-weight: 700;
+    color: var(--text-primary); line-height: 1;
+  }
+  
+  .upcomingMon {
+    font-size: 9px; font-weight: 700;
+    color: var(--primary-light);
+    text-transform: uppercase; letter-spacing: 0.3px;
+    margin-top: 1px;
+  }
+  
+  .upcomingInfo { flex: 1; min-width: 0; }
+  
+  .upcomingItemTitle {
+    font-size: 12px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  
+  .upcomingMeta {
+    display: flex; align-items: center; gap: 5px;
+  }
+  
+  .upcomingType {
+    font-size: 11px; color: var(--text-muted);
+  }
+  
+  .upcomingTime {
+    font-size: 11px; color: var(--text-muted);
+  }
+  
+  @media (max-width: 1024px) {
+    .layout { grid-template-columns: 1fr; }
+    .rightPanel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  }
+  
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .rightPanel { grid-template-columns: 1fr; }
+    .dayCell { min-height: 48px; }
+    .dayNum { font-size: 12px; }
+  }
