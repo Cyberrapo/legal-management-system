@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import FolderIcon from '@mui/icons-material/Folder'
 import GavelIcon from '@mui/icons-material/Gavel'
@@ -33,23 +34,24 @@ export default function Layout() {
   const closeSidebar = () => setSidebarOpen(false)
 
   const mainNav = [
-    { to: '/',             icon: <DashboardIcon sx={{fontSize:17}}/>,     label: 'Dashboard',     end: true  },
-    { to: '/cases',        icon: <FolderIcon sx={{fontSize:17}}/>,        label: 'Cases'                     },
-    { to: '/hearings',     icon: <GavelIcon sx={{fontSize:17}}/>,         label: 'Hearings',      badge: true },
-    { to: '/calendar',     icon: <CalendarMonthIcon sx={{fontSize:17}}/>, label: 'Calendar'                  },
-    { to: '/appointments', icon: <EventNoteIcon sx={{fontSize:17}}/>,     label: 'Appointments'              },
-    { to: '/tasks',        icon: <CheckBoxIcon sx={{fontSize:17}}/>,      label: 'Tasks'                     },
+    { to: '/', icon: <DashboardIcon sx={{ fontSize: 17 }} />, label: 'Dashboard', end: true },
+    { to: '/cases', icon: <FolderIcon sx={{ fontSize: 17 }} />, label: 'Cases' },
+    { to: '/hearings', icon: <GavelIcon sx={{ fontSize: 17 }} />, label: 'Hearings', badge: true },
+    { to: '/calendar', icon: <CalendarMonthIcon sx={{ fontSize: 17 }} />, label: 'Calendar' },
+    { to: '/appointments', icon: <EventNoteIcon sx={{ fontSize: 17 }} />, label: 'Appointments' },
+    { to: '/tasks', icon: <CheckBoxIcon sx={{ fontSize: 17 }} />, label: 'Tasks' },
+    { to: '/analytics', icon: <BarChartIcon sx={{ fontSize: 17 }} />, label: 'Analytics' },
   ]
 
   const toolsNav = [
-    { to: '/chat',      icon: <SmartToyIcon sx={{fontSize:17}}/>, label: 'AI Assistant'   },
-    { to: '/documents', icon: <ArticleIcon sx={{fontSize:17}}/>,  label: 'Doc Generator'  },
+    { to: '/chat', icon: <SmartToyIcon sx={{ fontSize: 17 }} />, label: 'AI Assistant' },
+    { to: '/documents', icon: <ArticleIcon sx={{ fontSize: 17 }} />, label: 'Doc Generator' },
   ]
 
   return (
     <div className={styles.container}>
       <button className={styles.menuBtn} onClick={() => setSidebarOpen(!sidebarOpen)}>
-        {sidebarOpen ? <CloseIcon sx={{fontSize:18}}/> : <MenuIcon sx={{fontSize:18}}/>}
+        {sidebarOpen ? <CloseIcon sx={{ fontSize: 18 }} /> : <MenuIcon sx={{ fontSize: 18 }} />}
       </button>
 
       {sidebarOpen && <div className={styles.overlay} onClick={closeSidebar} />}
@@ -59,13 +61,13 @@ export default function Layout() {
         {/* LOGO */}
         <div className={styles.logoRow}>
           <div className={styles.logo}>
-            <BalanceIcon sx={{fontSize:20}} className={styles.logoIcon} />
+            <BalanceIcon sx={{ fontSize: 20 }} className={styles.logoIcon} />
             <span>LegalPro</span>
           </div>
           <button className={styles.themeBtn} onClick={toggleTheme} title="Toggle theme">
             {theme === 'dark'
-              ? <LightModeIcon sx={{fontSize:15}}/>
-              : <DarkModeIcon sx={{fontSize:15}}/>
+              ? <LightModeIcon sx={{ fontSize: 15 }} />
+              : <DarkModeIcon sx={{ fontSize: 15 }} />
             }
           </button>
         </div>
@@ -120,7 +122,7 @@ export default function Layout() {
         {/* SIGN OUT */}
         <div className={styles.sidebarBottom}>
           <button onClick={handleLogout} className={styles.logout}>
-            <LogoutIcon sx={{fontSize:15}}/>
+            <LogoutIcon sx={{ fontSize: 15 }} />
             <span>Sign Out</span>
           </button>
         </div>

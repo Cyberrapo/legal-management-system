@@ -13,6 +13,7 @@ import DocumentGenerator from './pages/DocumentGenerator'
 import Tasks from './pages/Tasks'
 import CalendarPage from './pages/CalendarPage'
 import Layout from './components/Layout'
+import Analytics from './pages/Analytics'
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth()
@@ -30,7 +31,7 @@ function AppRoutes() {
           borderRadius: '10px',
           fontSize: '14px',
         }
-      }}/>
+      }} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -41,6 +42,7 @@ function AppRoutes() {
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="tasks" element={<Tasks />} />
+          <Route path="analytics" element={<Analytics />} />
           <Route path="chat" element={<Chatbot />} />
           <Route path="documents" element={<DocumentGenerator />} />
         </Route>
