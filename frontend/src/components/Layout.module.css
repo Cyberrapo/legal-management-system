@@ -230,14 +230,17 @@
   border-color: rgba(255, 107, 107, 0.3);
 }
 
-/* MAIN CONTENT */
+/* MAIN CONTENT - FIXED FOR LAPTOP */
 .main {
   flex: 1;
   margin-left: 250px;
+  width: calc(100% - 250px);
   padding: 28px 32px;
   min-height: 100vh;
   background: var(--bg-primary);
   animation: fadeIn 0.4s ease;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 /* MENU BUTTON (mobile) */
@@ -273,9 +276,24 @@
   animation: fadeIn 0.2s ease;
 }
 
+/* LAPTOP SCREEN OPTIMIZATION (769px - 1366px) */
+@media (min-width: 769px) and (max-width: 1366px) {
+  .sidebar {
+    width: 250px;
+  }
+
+  .main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 24px 20px;
+  }
+}
+
+/* TABLET SCREENS (max 768px) */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    width: 260px;
   }
 
   .sidebarOpen {
@@ -285,11 +303,30 @@
 
   .main {
     margin-left: 0;
+    width: 100%;
     padding: 16px;
     padding-top: 60px;
   }
 
   .menuBtn {
     display: flex;
+  }
+}
+
+/* SMALL LAPTOP / LARGE TABLET (1024px specific) */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .main {
+    padding: 20px 24px;
+  }
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
