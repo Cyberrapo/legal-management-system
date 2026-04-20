@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
     FolderOpen, CalendarMonth, Person, Logout,
     Gavel, Description, ExpandMore, ExpandLess,
-    Download, Eye, BalanceOutlined
+    Download, Visibility, BalanceOutlined
 } from '@mui/icons-material'
 import axios from 'axios'
 import styles from './ClientPortal.module.css'
@@ -327,7 +327,7 @@ export default function ClientPortal() {
                                                                 <div className={styles.docActions}>
                                                                     <button className="icon-btn info"
                                                                         title="View" onClick={() => setViewingDoc(doc)}>
-                                                                        <Eye sx={{ fontSize: 13 }} />
+                                                                        <Visibility sx={{ fontSize: 13 }} />
                                                                     </button>
                                                                     <a href={doc.url} download target="_blank"
                                                                         rel="noreferrer" className="icon-btn success" title="Download">
