@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import PeopleIcon from '@mui/icons-material/People'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import FolderIcon from '@mui/icons-material/Folder'
@@ -41,6 +42,7 @@ export default function Layout() {
     { to: '/appointments', icon: <EventNoteIcon sx={{ fontSize: 17 }} />, label: 'Appointments' },
     { to: '/tasks', icon: <CheckBoxIcon sx={{ fontSize: 17 }} />, label: 'Tasks' },
     { to: '/analytics', icon: <BarChartIcon sx={{ fontSize: 17 }} />, label: 'Analytics' },
+    { to: '/clients', icon: <PeopleIcon sx={{ fontSize: 17 }} />, label: 'Clients' },
   ]
 
   const toolsNav = [

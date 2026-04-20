@@ -12,8 +12,10 @@ import Hearings from './pages/Hearings'
 import DocumentGenerator from './pages/DocumentGenerator'
 import Tasks from './pages/Tasks'
 import CalendarPage from './pages/CalendarPage'
-import Layout from './components/Layout'
 import Analytics from './pages/Analytics'
+import Clients from './pages/Clients'
+import ClientPortal from './pages/ClientPortal'
+import Layout from './components/Layout'
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth()
@@ -25,16 +27,17 @@ function AppRoutes() {
     <BrowserRouter>
       <Toaster position="top-right" toastOptions={{
         style: {
-          background: 'var(--bg-card)',
-          color: 'var(--text-primary)',
-          border: '1px solid var(--border)',
-          borderRadius: '10px',
-          fontSize: '14px',
+          background: 'var(--bg-card)', color: 'var(--text-primary)',
+          border: '1px solid var(--border)', borderRadius: '10px', fontSize: '14px',
         }
       }} />
       <Routes>
+        {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/client-portal" element={<ClientPortal />} />
+
+        {/* Lawyer Portal */}
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="cases" element={<Cases />} />
@@ -42,9 +45,10 @@ function AppRoutes() {
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="tasks" element={<Tasks />} />
-          <Route path="analytics" element={<Analytics />} />
           <Route path="chat" element={<Chatbot />} />
           <Route path="documents" element={<DocumentGenerator />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="clients" element={<Clients />} />
         </Route>
       </Routes>
     </BrowserRouter>

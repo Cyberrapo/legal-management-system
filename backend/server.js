@@ -4,13 +4,12 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 dotenv.config()
 
-console.log('API KEY loaded:', process.env.ANTHROPIC_API_KEY ? 'YES' : 'NO')
-
 const app = express()
 
 app.use(cors({
   origin: [
     'http://localhost:5173',
+    'http://localhost:5174',
     'https://legal-management-system-ecru.vercel.app'
   ],
   credentials: true
@@ -24,6 +23,7 @@ app.use('/api/appointments', require('./routes/appointmentRoutes'))
 app.use('/api/documents', require('./routes/documentRoutes'))
 app.use('/api/chat', require('./routes/chatRoutes'))
 app.use('/api/tasks', require('./routes/taskRoutes'))
+app.use('/api/clients', require('./routes/clientRoutes'))
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
