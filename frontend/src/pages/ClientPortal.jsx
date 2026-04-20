@@ -7,7 +7,7 @@ import {
 import axios from 'axios'
 import styles from './ClientPortal.module.css'
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://legal-backend-ustd.onrender.com/api')
 
 const API = axios.create({ baseURL: BASE })
 API.interceptors.request.use(req => {
