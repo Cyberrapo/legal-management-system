@@ -36,13 +36,13 @@ export default function Layout() {
 
   const mainNav = [
     { to: '/', icon: <DashboardIcon sx={{ fontSize: 17 }} />, label: 'Dashboard', end: true },
+    { to: '/clients', icon: <PeopleIcon sx={{ fontSize: 17 }} />, label: 'Clients' },
     { to: '/cases', icon: <FolderIcon sx={{ fontSize: 17 }} />, label: 'Cases' },
     { to: '/hearings', icon: <GavelIcon sx={{ fontSize: 17 }} />, label: 'Hearings', badge: true },
     { to: '/calendar', icon: <CalendarMonthIcon sx={{ fontSize: 17 }} />, label: 'Calendar' },
     { to: '/appointments', icon: <EventNoteIcon sx={{ fontSize: 17 }} />, label: 'Appointments' },
     { to: '/tasks', icon: <CheckBoxIcon sx={{ fontSize: 17 }} />, label: 'Tasks' },
     { to: '/analytics', icon: <BarChartIcon sx={{ fontSize: 17 }} />, label: 'Analytics' },
-    { to: '/clients', icon: <PeopleIcon sx={{ fontSize: 17 }} />, label: 'Clients' },
   ]
 
   const toolsNav = [
