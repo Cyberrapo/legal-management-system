@@ -14,7 +14,6 @@ import Tasks from './pages/Tasks'
 import CalendarPage from './pages/CalendarPage'
 import Analytics from './pages/Analytics'
 import Clients from './pages/Clients'
-import ClientPortal from './pages/ClientPortal'
 import Layout from './components/Layout'
 
 const PrivateRoute = ({ children }) => {
@@ -35,7 +34,6 @@ function AppRoutes() {
         {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/client-portal" element={<ClientPortal />} />
 
         {/* Lawyer Portal */}
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
