@@ -1,25 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const {
-    createClient, getClients, updateClient, deleteClient,
-    linkCaseToClient, clientLogin,
-    getClientCases, getClientAppointments, getClientLawyer
+  createClient, getClients, updateClient,
+  deleteClient, linkCaseToClient
 } = require('../controllers/clientController')
 const { protect } = require('../middleware/authMiddleware')
 
-// Public
-router.post('/login', clientLogin)
-
-// Lawyer manages clients (protected)
-router.get('/', protect, getClients)
-router.post('/', protect, createClient)
-router.put('/:id', protect, updateClient)
-router.delete('/:id', protect, deleteClient)
-router.post('/link-case/:caseId', protect, linkCaseToClient)
-
-// Client portal routes (protected)
-router.get('/portal/cases', protect, getClientCases)
-router.get('/portal/appointments', protect, getClientAppointments)
-router.get('/portal/lawyer', protect, getClientLawyer)
+router.use(protect)
+router.get('/', getClients)
+router.post('/', createClient)
+router.put('/:id', updateClient)
+router.delete('/:id', deleteClient)
+router.post('/link-case/:caseId', linkCaseToClient)
 
 module.exports = router

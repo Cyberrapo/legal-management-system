@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   role:     { type: String, enum: ['lawyer', 'client'], default: 'lawyer' },
   phone:    { type: String },
   address:  { type: String },
+  notes:    { type: String },
   lawyerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true })
 

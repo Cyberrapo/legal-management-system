@@ -31,13 +31,11 @@ function AppRoutes() {
         }
       }} />
       <Routes>
-        {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Lawyer Portal */}
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route index element={<Dashboard />} />
+          <Route path="clients" element={<Clients />} />
           <Route path="cases" element={<Cases />} />
           <Route path="hearings" element={<Hearings />} />
           <Route path="calendar" element={<CalendarPage />} />
@@ -46,7 +44,6 @@ function AppRoutes() {
           <Route path="chat" element={<Chatbot />} />
           <Route path="documents" element={<DocumentGenerator />} />
           <Route path="analytics" element={<Analytics />} />
-          <Route path="clients" element={<Clients />} />
         </Route>
       </Routes>
     </BrowserRouter>

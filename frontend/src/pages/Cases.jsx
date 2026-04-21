@@ -8,6 +8,7 @@ import API from '../api/axios'
 import toast from 'react-hot-toast'
 import CaseTimeline from '../components/CaseTimeline'
 import styles from './Cases.module.css'
+import { Search, FilterList, Clear } from '@mui/icons-material'
 
 const empty = {
   title: '', description: '', clientName: '',
@@ -41,6 +42,9 @@ export default function Cases() {
   const [viewingDoc, setViewingDoc] = useState(null)
   const [deletingDoc, setDeletingDoc] = useState(null)
   const fileRef = useRef()
+  const [search, setSearch] = useState('')
+  const [filterStatus, setFilterStatus] = useState('All')
+  const [filterType, setFilterType] = useState('All')
 
   const fetchCases = async () => {
     try {
@@ -148,6 +152,21 @@ export default function Cases() {
   const toggleDocs = (id) => setExpandedCase(prev => prev === id ? null : id)
   const toggleTimeline = (id) => setExpandedTimeline(prev => prev === id ? null : id)
 
+  const filteredCases = cases.filter(c => {
+    const q = search.toLowerCase()
+    const matchSearch =
+      c.title?.toLowerCase().includes(q) ||
+      c.clientName?.toLowerCase().includes(q) ||
+      c.description?.toLowerCase().includes(q) ||
+      c.caseType?.toLowerCase().includes(q)
+    const matchStatus = filterStatus === 'All' || c.status === filterStatus
+    const matchType = filterType === 'All' || c.caseType === filterType
+    return matchSearch && matchStatus && matchType
+  })
+
+  const hasFilters = search || filterStatus !== 'All' || filterType !== 'All'
+  const clearFilters = () => { setSearch(''); setFilterStatus('All'); setFilterType('All') }
+
   return (
     <div className="animate-fade">
 
@@ -166,6 +185,46 @@ export default function Cases() {
             : <><Plus size={15} /> New Case</>
           }
         </button>
+      </div>
+
+      {/* SEARCH & FILTER */}
+      <div className={styles.searchBar}>
+        <div className={styles.searchInput}>
+          <Search sx={{ fontSize: 16, color: 'var(--text-muted)' }} />
+          <input
+            placeholder="Search by title, client, type..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          {search && (
+            <button className={styles.clearBtn} onClick={() => setSearch('')}>
+              <Close sx={{ fontSize: 14 }} />
+            </button>
+          )}
+        </div>
+
+        <div className={styles.filterRow}>
+          <div className={styles.filterGroup}>
+            <FilterList sx={{ fontSize: 14, color: 'var(--text-muted)' }} />
+            {['All', 'Open', 'In Progress', 'Closed'].map(s => (
+              <button key={s}
+                className={`${styles.filterBtn} ${filterStatus === s ? styles.filterActive : ''}`}
+                onClick={() => setFilterStatus(s)}>{s}</button>
+            ))}
+          </div>
+          <div className={styles.filterGroup}>
+            {['All', 'Civil', 'Criminal', 'Family', 'Corporate', 'Other'].map(t => (
+              <button key={t}
+                className={`${styles.filterBtn} ${filterType === t ? styles.filterActive : ''}`}
+                onClick={() => setFilterType(t)}>{t}</button>
+            ))}
+          </div>
+          {hasFilters && (
+            <button className={styles.clearFilters} onClick={clearFilters}>
+              <Clear sx={{ fontSize: 13 }} /> Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── FORM ── */}
@@ -189,7 +248,7 @@ export default function Cases() {
                 <input className="input"
                   placeholder="e.g. Property Dispute — Sharma vs State"
                   value={form.title}
-                  onChange={e => setForm({...form, title: e.target.value})}
+                  onChange={e => setForm({ ...form, title: e.target.value })}
                   required />
               </div>
 
@@ -199,7 +258,7 @@ export default function Cases() {
                 <input className="input"
                   placeholder="Full name of client"
                   value={form.clientName}
-                  onChange={e => setForm({...form, clientName: e.target.value})}
+                  onChange={e => setForm({ ...form, clientName: e.target.value })}
                   required />
               </div>
 
@@ -207,8 +266,8 @@ export default function Cases() {
               <div>
                 <label className="form-label">Case Type</label>
                 <select className="input" value={form.caseType}
-                  onChange={e => setForm({...form, caseType: e.target.value})}>
-                  {['Civil','Criminal','Family','Corporate','Other'].map(t =>
+                  onChange={e => setForm({ ...form, caseType: e.target.value })}>
+                  {['Civil', 'Criminal', 'Family', 'Corporate', 'Other'].map(t =>
                     <option key={t}>{t}</option>
                   )}
                 </select>
@@ -218,8 +277,8 @@ export default function Cases() {
               <div>
                 <label className="form-label">Status</label>
                 <select className="input" value={form.status}
-                  onChange={e => setForm({...form, status: e.target.value})}>
-                  {['Open','In Progress','Closed'].map(s =>
+                  onChange={e => setForm({ ...form, status: e.target.value })}>
+                  {['Open', 'In Progress', 'Closed'].map(s =>
                     <option key={s}>{s}</option>
                   )}
                 </select>
@@ -229,10 +288,10 @@ export default function Cases() {
               <div className="form-full">
                 <label className="form-label">Description</label>
                 <textarea className="input"
-                  style={{height:'80px', resize:'vertical'}}
+                  style={{ height: '80px', resize: 'vertical' }}
                   placeholder="Brief case description..."
                   value={form.description}
-                  onChange={e => setForm({...form, description: e.target.value})} />
+                  onChange={e => setForm({ ...form, description: e.target.value })} />
               </div>
 
               {/* Hearing Date */}
@@ -240,7 +299,7 @@ export default function Cases() {
                 <label className="form-label">Hearing Date</label>
                 <input className="input" type="date"
                   value={form.hearingDate}
-                  onChange={e => setForm({...form, hearingDate: e.target.value})} />
+                  onChange={e => setForm({ ...form, hearingDate: e.target.value })} />
               </div>
 
               {/* Hearing Time */}
@@ -248,7 +307,7 @@ export default function Cases() {
                 <label className="form-label">Hearing Time</label>
                 <input className="input" type="time"
                   value={form.hearingTime}
-                  onChange={e => setForm({...form, hearingTime: e.target.value})} />
+                  onChange={e => setForm({ ...form, hearingTime: e.target.value })} />
               </div>
 
               {/* Hearing Notes */}
@@ -257,7 +316,7 @@ export default function Cases() {
                 <input className="input"
                   placeholder="e.g. Court Room 3, Judge Sharma"
                   value={form.hearingNotes}
-                  onChange={e => setForm({...form, hearingNotes: e.target.value})} />
+                  onChange={e => setForm({ ...form, hearingNotes: e.target.value })} />
               </div>
 
               {/* Document Upload */}
@@ -276,7 +335,7 @@ export default function Cases() {
                     ref={fileRef}
                     type="file"
                     multiple
-                    style={{display:'none'}}
+                    style={{ display: 'none' }}
                     onChange={handleAddFile}
                     accept=".pdf,.jpg,.jpeg,.png,.docx"
                   />
@@ -293,7 +352,7 @@ export default function Cases() {
                         </span>
                         <button type="button"
                           className="icon-btn danger"
-                          style={{width:26, height:26}}
+                          style={{ width: 26, height: 26 }}
                           onClick={() => removeFile(i)}>
                           <X size={12} />
                         </button>
@@ -325,13 +384,22 @@ export default function Cases() {
 
       {/* ── CASES GRID ── */}
       <div className={styles.caseGrid}>
-        {cases.length === 0 ? (
-          <div className="empty-state" style={{gridColumn:'1/-1'}}>
+        {filteredCases.length === 0 ? (
+          <div className="empty-state" style={{ gridColumn: '1/-1' }}>
             <FolderOpen size={52} strokeWidth={1} className="empty-icon" />
-            <p className="empty-title">No cases yet</p>
-            <p className="empty-subtitle">Click "+ New Case" to get started</p>
+            <p className="empty-title">
+              {hasFilters ? 'No cases match your search' : 'No cases yet'}
+            </p>
+            <p className="empty-subtitle">
+              {hasFilters ? 'Try clearing filters' : 'Click "+ New Case" to get started'}
+            </p>
+            {hasFilters && (
+              <button className="btn-ghost" style={{ marginTop: 8 }} onClick={clearFilters}>
+                <Clear sx={{ fontSize: 13 }} /> Clear Filters
+              </button>
+            )}
           </div>
-        ) : cases.map(c => (
+        ) : filteredCases.map(c => (
           <div key={c._id} className={`card ${styles.caseCard} animate-fade`}>
 
             {/* Card Top Row — Status + Actions */}
@@ -474,7 +542,7 @@ export default function Cases() {
             </div>
             <div className={styles.modalBody}>
               {viewingDoc.fileType === 'application/pdf' ||
-               viewingDoc.name?.endsWith('.pdf') ? (
+                viewingDoc.name?.endsWith('.pdf') ? (
                 <iframe
                   src={viewingDoc.url}
                   title={viewingDoc.name}
