@@ -297,9 +297,13 @@ export default function Cases() {
               {/* Hearing Date */}
               <div>
                 <label className="form-label">Hearing Date</label>
-                <input className="input" type="date"
+                <input
+                  className="input"
+                  type="date"
+                  min={new Date().toISOString().split('T')[0]}
                   value={form.hearingDate}
-                  onChange={e => setForm({ ...form, hearingDate: e.target.value })} />
+                  onChange={e => setForm({ ...form, hearingDate: e.target.value })}
+                />
               </div>
 
               {/* Hearing Time */}

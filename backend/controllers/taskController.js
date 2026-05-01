@@ -10,6 +10,16 @@ const getTasks = async (req, res) => {
 const createTask = async (req, res) => {
   try {
     const { title, description, dueDate, priority, status, caseRef } = req.body
+
+    // ── Validate due date is not in the past ──
+    if (dueDate) {
+      const due = new Date(dueDate)
+      due.setHours(23, 59, 59) // allow selecting today
+      if (due < new Date()) {
+        return res.status(400).json({ message: 'Due date cannot be in the past' })
+      }
+    }
+
     const task = await Task.create({
       title, description, dueDate, priority, status, caseRef,
       lawyer: req.user._id
@@ -20,7 +30,18 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    // ── Validate due date is not in the past ──
+    if (req.body.dueDate) {
+      const due = new Date(req.body.dueDate)
+      due.setHours(23, 59, 59)
+      if (due < new Date()) {
+        return res.status(400).json({ message: 'Due date cannot be in the past' })
+      }
+    }
+
+    const task = await Task.findByIdAndUpdate(
+      req.params.id, req.body, { new: true }
+    )
     if (!task) return res.status(404).json({ message: 'Task not found' })
     res.json(task)
   } catch (err) { res.status(500).json({ message: err.message }) }

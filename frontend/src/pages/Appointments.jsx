@@ -26,8 +26,22 @@ export default function Appointments() {
 
   useEffect(() => { fetchAppts() }, [])
 
+  // Get today's date in YYYY-MM-DD format for min attribute
+  const todayStr = new Date().toISOString().split('T')[0]
+
+  // Get current time in HH:MM format
+  const nowTimeStr = new Date().toTimeString().slice(0, 5)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // ── Frontend validation ──
+    const selectedDateTime = new Date(`${form.date}T${form.time}`)
+    if (selectedDateTime < new Date()) {
+      toast.error('Cannot book an appointment in the past')
+      return
+    }
+
     try {
       if (editId) {
         await API.put(`/appointments/${editId}`, form)
@@ -38,9 +52,10 @@ export default function Appointments() {
       }
       setForm(empty); setShowForm(false); setEditId(null)
       fetchAppts()
-    } catch { toast.error('Something went wrong') }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Something went wrong')
+    }
   }
-
   const handleDelete = async (id) => {
     if (!confirm('Cancel this appointment?')) return
     await API.delete(`/appointments/${id}`)
@@ -82,28 +97,41 @@ export default function Appointments() {
             <label>Appointment Title</label>
             <input placeholder="e.g. Case hearing, Client meeting"
               value={form.title}
-              onChange={e => setForm({...form, title: e.target.value})} required />
+              onChange={e => setForm({ ...form, title: e.target.value })} required />
           </div>
           <div className={styles.inputGroup}>
             <label>Client Name</label>
             <input placeholder="Client full name"
               value={form.clientName}
-              onChange={e => setForm({...form, clientName: e.target.value})} required />
+              onChange={e => setForm({ ...form, clientName: e.target.value })} required />
           </div>
           <div className={styles.inputGroup}>
             <label>Date</label>
-            <input type="date" value={form.date}
-              onChange={e => setForm({...form, date: e.target.value})} required />
+            <input
+              type="date"
+              className="input"
+              value={form.date}
+              min={todayStr}
+              onChange={e => setForm({ ...form, date: e.target.value })}
+              required
+            />
           </div>
+
           <div className={styles.inputGroup}>
             <label>Time</label>
-            <input type="time" value={form.time}
-              onChange={e => setForm({...form, time: e.target.value})} required />
+            <input
+              type="time"
+              className="input"
+              value={form.time}
+              min={form.date === todayStr ? nowTimeStr : undefined}
+              onChange={e => setForm({ ...form, time: e.target.value })}
+              required
+            />
           </div>
           <div className={styles.inputGroup}>
             <label>Status</label>
             <select value={form.status}
-              onChange={e => setForm({...form, status: e.target.value})}>
+              onChange={e => setForm({ ...form, status: e.target.value })}>
               {['Scheduled', 'Completed', 'Cancelled'].map(s => (
                 <option key={s}>{s}</option>
               ))}
@@ -113,7 +141,7 @@ export default function Appointments() {
             <label>Notes (optional)</label>
             <textarea placeholder="Any additional notes..."
               value={form.notes}
-              onChange={e => setForm({...form, notes: e.target.value})} />
+              onChange={e => setForm({ ...form, notes: e.target.value })} />
           </div>
           <div className={styles.formActions}>
             <button type="button"
