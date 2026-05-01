@@ -37,7 +37,7 @@ export default function Login() {
         <div className={styles.orb3} />
         <div className={styles.heroContent}>
           <div className={styles.heroIcon}>⚖️</div>
-          <h1 className={styles.heroTitle}>Legal practice, beautifully managed</h1>
+          <h1 className={styles.heroTitle}>Legal Practice, Beautifully Managed</h1>
           <p className={styles.heroSubtitle}>
             Track cases, hearings, appointments, and documents — all in one intelligent workspace.
           </p>
@@ -79,10 +79,10 @@ export default function Login() {
                     placeholder="you@lawfirm.com"
                     type="email"
                     value={form.email}
-                    onChange={e => setForm({...form, email: e.target.value})}
+                    onChange={e => setForm({ ...form, email: e.target.value })}
                     required
                   />
-                  <span className={styles.inputIcon}><Mail size={15}/></span>
+                  <span className={styles.inputIcon}><Mail size={15} /></span>
                 </div>
               </div>
 
@@ -93,21 +93,21 @@ export default function Login() {
                     placeholder="Enter your password"
                     type="password"
                     value={form.password}
-                    onChange={e => setForm({...form, password: e.target.value})}
+                    onChange={e => setForm({ ...form, password: e.target.value })}
                     required
                   />
-                  <span className={styles.inputIcon}><Lock size={15}/></span>
+                  <span className={styles.inputIcon}><Lock size={15} /></span>
                 </div>
               </div>
             </div>
 
             <button type="submit" className={styles.btn} disabled={loading}>
-              {loading ? 'Signing in…' : <><LogIn size={16}/> Sign In</>}
+              {loading ? 'Signing in…' : <><LogIn size={16} /> Sign In</>}
             </button>
           </form>
 
           <p className={styles.link}>
-            No account? <Link to="/register">Create one here <ArrowRight size={11} style={{display:'inline'}}/></Link>
+            No account? <Link to="/register">Create one here <ArrowRight size={11} style={{ display: 'inline' }} /></Link>
           </p>
         </div>
       </div>
