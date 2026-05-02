@@ -1,4 +1,6 @@
-.container { animation: fadeIn 0.4s ease; }
+.container {
+  animation: fadeIn 0.4s ease;
+}
 
 .header {
   display: flex;
@@ -15,7 +17,11 @@
   color: var(--text-primary);
 }
 
-.subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
 
 .resetBtn {
   background: var(--bg-secondary);
@@ -52,7 +58,9 @@
   transition: var(--transition);
 }
 
-.stepActive { color: var(--primary-light); }
+.stepActive {
+  color: var(--primary-light);
+}
 
 .stepNum {
   width: 24px;
@@ -107,7 +115,9 @@
   background: var(--bg-hover);
 }
 
-.templateIcon { font-size: 36px; }
+.templateIcon {
+  font-size: 36px;
+}
 
 .templateName {
   font-size: 16px;
@@ -150,7 +160,9 @@
   border-bottom: 1px solid var(--border);
 }
 
-.formIcon { font-size: 32px; }
+.formIcon {
+  font-size: 32px;
+}
 
 .formTitle {
   font-size: 18px;
@@ -158,7 +170,11 @@
   color: var(--text-primary);
 }
 
-.formSubtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.formSubtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
 
 .fieldsGrid {
   display: grid;
@@ -167,7 +183,9 @@
   margin-bottom: 24px;
 }
 
-.fieldFull { grid-column: 1 / -1; }
+.fieldFull {
+  grid-column: 1 / -1;
+}
 
 .fieldGroup {
   display: flex;
@@ -196,7 +214,9 @@
   resize: vertical;
 }
 
-.fieldInput::placeholder { color: var(--text-muted); }
+.fieldInput::placeholder {
+  color: var(--text-muted);
+}
 
 .fieldInput:focus {
   border-color: var(--primary);
@@ -268,7 +288,11 @@
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .loadingDoc p {
   font-size: 16px;
@@ -276,7 +300,10 @@
   color: var(--text-primary);
 }
 
-.loadingDoc span { font-size: 13px; color: var(--text-muted); }
+.loadingDoc span {
+  font-size: 13px;
+  color: var(--text-muted);
+}
 
 .outputHeader {
   display: flex;
@@ -306,7 +333,9 @@
   flex-wrap: wrap;
 }
 
-.editBtn, .downloadBtn, .printBtn {
+.editBtn,
+.downloadBtn,
+.printBtn {
   padding: 9px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -321,7 +350,10 @@
   color: var(--text-secondary);
 }
 
-.editBtn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.editBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
 
 .downloadBtn {
   background: rgba(79, 172, 254, 0.15);
@@ -329,7 +361,9 @@
   border-color: rgba(79, 172, 254, 0.3);
 }
 
-.downloadBtn:hover { background: rgba(79, 172, 254, 0.25); }
+.downloadBtn:hover {
+  background: rgba(79, 172, 254, 0.25);
+}
 
 .printBtn {
   background: rgba(67, 233, 123, 0.15);
@@ -337,7 +371,9 @@
   border-color: rgba(67, 233, 123, 0.3);
 }
 
-.printBtn:hover { background: rgba(67, 233, 123, 0.25); }
+.printBtn:hover {
+  background: rgba(67, 233, 123, 0.25);
+}
 
 .docOutput {
   width: 100%;
@@ -368,9 +404,54 @@
 }
 
 @media (max-width: 768px) {
-  .fieldsGrid { grid-template-columns: 1fr; }
-  .generateSection { flex-direction: column; align-items: stretch; }
-  .generateBtn { text-align: center; }
-  .outputActions { justify-content: stretch; }
-  .editBtn, .downloadBtn, .printBtn { flex: 1; text-align: center; }
+  .fieldsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .generateSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .generateBtn {
+    text-align: center;
+  }
+
+  .outputActions {
+    justify-content: stretch;
+  }
+
+  .editBtn,
+  .downloadBtn,
+  .printBtn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.readyBadge {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(67, 233, 123, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(67, 233, 123, 0.25);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.downloadDocxBtn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: white !important;
+  border-color: transparent !important;
+  font-weight: 700 !important;
+}
+
+.downloadDocxBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+}
+
+.downloadDocxBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
