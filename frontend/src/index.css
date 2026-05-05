@@ -71,7 +71,7 @@ body {
   --secondary: #d063e0;
   --accent: #2990ee;
   --success: #22c55e;
-  --warning: #f59e0b;
+  --warning: #e68a00;
   --danger: #ef4444;
 
   --bg-primary: #f0f2ff;
@@ -80,28 +80,27 @@ body {
   --bg-hover: #efefff;
   --bg-input: #ffffff;
 
-  --border: rgba(91, 82, 240, 0.15);
-  --border-hover: rgba(91, 82, 240, 0.35);
+  --border: rgba(91, 82, 240, 0.2);
+  --border-hover: rgba(91, 82, 240, 0.4);
 
-  --text-primary: #1a1a3e;
-  --text-secondary: #4a4a6a;
-  --text-muted: #8a8aaa;
+  /* DARK TEXT — clearly visible in screenshots */
+  --text-primary: #0a0a1a;
+  --text-secondary: #1a1a3a;
+  --text-muted: #3a3a5a;
 
   --shadow: 0 8px 32px rgba(91, 82, 240, 0.1);
   --shadow-hover: 0 16px 48px rgba(91, 82, 240, 0.2);
   --shadow-card: 0 2px 12px rgba(91, 82, 240, 0.08);
-  --shadow-sidebar: 0 4px 20px rgba(0, 0, 0, 0.05);
 
   --radius: 16px;
   --radius-sm: 10px;
   --radius-xs: 6px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Sidebar specific - Light theme (FIXED) */
-  --sidebar-bg: #ffffff;
-  --sidebar-border: rgba(0, 0, 0, 0.08);
-  --sidebar-text: #4a4a6a;
-  --sidebar-active: rgba(91, 82, 240, 0.1);
+  --sidebar-bg: #1a1a3e;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-text: rgba(255, 255, 255, 0.65);
+  --sidebar-active: rgba(255, 255, 255, 0.15);
 }
 
 /* ── SCROLLBAR ── */
@@ -451,4 +450,43 @@ body {
   .page-title {
     font-size: 22px;
   }
+}
+
+/* ── LIGHT THEME FORCED DARK TEXT ── */
+[data-theme="light"] .page-title,
+[data-theme="light"] .page-subtitle,
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3 {
+  color: #0a0a1a;
+}
+
+[data-theme="light"] .input {
+  color: #0a0a1a;
+  background: #ffffff;
+  border-color: rgba(91, 82, 240, 0.25);
+}
+
+[data-theme="light"] .input::placeholder {
+  color: #6a6a8a;
+}
+
+[data-theme="light"] select option {
+  background: #ffffff;
+  color: #0a0a1a;
+}
+
+[data-theme="light"] .card {
+  background: #ffffff;
+  border-color: rgba(91, 82, 240, 0.18);
+}
+
+[data-theme="light"] .badge {
+  font-weight: 700;
+}
+
+[data-theme="light"] .metaItem {
+  color: #1a1a3a !important;
+  background: #f0f0ff;
+  border-color: rgba(91, 82, 240, 0.2);
 }

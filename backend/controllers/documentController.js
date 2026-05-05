@@ -9,23 +9,21 @@ const uploadDocuments = async (req, res) => {
       return res.status(400).json({ message: 'No files uploaded' })
 
     const newDocs = req.files.map(file => ({
-      url: file.path,
-      publicId: file.filename,
-      name: file.originalname,
-      fileType: file.mimetype,
+      url:        file.path,
+      publicId:   file.filename,
+      name:       file.originalname,
+      fileType:   file.mimetype,
       uploadedAt: new Date()
     }))
 
     const docNames = req.files.map(f => f.originalname).join(', ')
-
     c.documents.push(...newDocs)
     c.timeline.push({
-      action: 'Documents Uploaded',
-      description: `${req.files.length} document(s) uploaded: ${docNames}`,
-      type: 'document',
+      action:      'Documents Uploaded',
+      description: `${req.files.length} document(s) added: ${docNames}`,
+      type:        'document',
       performedBy: req.user?.name || 'Lawyer'
     })
-
     await c.save()
     res.json(c)
   } catch (err) {
@@ -44,20 +42,23 @@ const deleteDocument = async (req, res) => {
 
     const docName = doc.name
 
+    // Delete from Cloudinary
     try {
-      await cloudinary.uploader.destroy(doc.publicId)
-    } catch (e) {
-      console.log('Cloudinary delete skipped:', e.message)
+      const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
+      await cloudinary.uploader.destroy(doc.publicId, {
+        resource_type: isPDF ? 'raw' : 'image'
+      })
+    } catch (cloudErr) {
+      console.log('Cloudinary delete note:', cloudErr.message)
     }
 
     c.documents.pull({ _id: req.params.docId })
     c.timeline.push({
-      action: 'Document Removed',
+      action:      'Document Removed',
       description: `Document "${docName}" was removed`,
-      type: 'document',
+      type:        'document',
       performedBy: req.user?.name || 'Lawyer'
     })
-
     await c.save()
     res.json({ message: 'Document deleted', case: c })
   } catch (err) {

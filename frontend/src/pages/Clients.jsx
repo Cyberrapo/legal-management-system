@@ -11,17 +11,17 @@ import styles from './Clients.module.css'
 const empty = { name: '', email: '', phone: '', address: '', notes: '' }
 
 export default function Clients() {
-  const [clients, setClients]       = useState([])
-  const [cases, setCases]           = useState([])
-  const [form, setForm]             = useState(empty)
-  const [showForm, setShowForm]     = useState(false)
-  const [editId, setEditId]         = useState(null)
-  const [loading, setLoading]       = useState(false)
-  const [linkModal, setLinkModal]   = useState(null)
+  const [clients, setClients] = useState([])
+  const [cases, setCases] = useState([])
+  const [form, setForm] = useState(empty)
+  const [showForm, setShowForm] = useState(false)
+  const [editId, setEditId] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [linkModal, setLinkModal] = useState(null)
   const [selectedCase, setSelectedCase] = useState('')
 
   // Search & Filter
-  const [search, setSearch]         = useState('')
+  const [search, setSearch] = useState('')
   const [filterCase, setFilterCase] = useState('All')
 
   const fetchClients = async () => {
@@ -35,13 +35,18 @@ export default function Clients() {
     try {
       const { data } = await API.get('/cases')
       setCases(data)
-    } catch {}
+    } catch { }
   }
 
   useEffect(() => { fetchClients(); fetchCases() }, [])
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); setLoading(true)
+    e.preventDefault()
+    if (form.phone && form.phone.length !== 10) {
+      toast.error('Phone number must be exactly 10 digits')
+      return
+    }
+    setLoading(true)
     try {
       if (editId) {
         await API.put(`/clients/${editId}`, form)
@@ -132,8 +137,8 @@ export default function Clients() {
         <button className="btn-primary"
           onClick={() => showForm ? resetForm() : setShowForm(true)}>
           {showForm
-            ? <><Close sx={{fontSize:15}}/> Cancel</>
-            : <><Add sx={{fontSize:15}}/> Add Client</>
+            ? <><Close sx={{ fontSize: 15 }} /> Cancel</>
+            : <><Add sx={{ fontSize: 15 }} /> Add Client</>
           }
         </button>
       </div>
@@ -141,7 +146,7 @@ export default function Clients() {
       {/* SEARCH & FILTER BAR */}
       <div className={styles.searchBar}>
         <div className={styles.searchInput}>
-          <Search sx={{fontSize:16, color:'var(--text-muted)'}}/>
+          <Search sx={{ fontSize: 16, color: 'var(--text-muted)' }} />
           <input
             placeholder="Search by name, email or phone..."
             value={search}
@@ -149,13 +154,13 @@ export default function Clients() {
           />
           {search && (
             <button className={styles.clearBtn} onClick={() => setSearch('')}>
-              <Close sx={{fontSize:14}}/>
+              <Close sx={{ fontSize: 14 }} />
             </button>
           )}
         </div>
 
         <div className={styles.filterGroup}>
-          <FilterList sx={{fontSize:15, color:'var(--text-muted)'}}/>
+          <FilterList sx={{ fontSize: 15, color: 'var(--text-muted)' }} />
           {['All', 'Linked', 'Unlinked'].map(f => (
             <button key={f}
               className={`${styles.filterBtn} ${filterCase === f ? styles.filterActive : ''}`}
@@ -167,7 +172,7 @@ export default function Clients() {
 
         {hasFilters && (
           <button className={styles.clearFilters} onClick={clearFilters}>
-            <Clear sx={{fontSize:14}}/> Clear
+            <Clear sx={{ fontSize: 14 }} /> Clear
           </button>
         )}
       </div>
@@ -180,7 +185,7 @@ export default function Clients() {
               {editId ? 'Edit Client' : 'New Client'}
             </h3>
             <button className="icon-btn" onClick={resetForm}>
-              <Close sx={{fontSize:16}}/>
+              <Close sx={{ fontSize: 16 }} />
             </button>
           </div>
           <form onSubmit={handleSubmit}>
@@ -189,32 +194,46 @@ export default function Clients() {
                 <label className="form-label">Full Name *</label>
                 <input className="input" placeholder="Client full name"
                   value={form.name}
-                  onChange={e => setForm({...form, name: e.target.value})} required />
+                  onChange={e => setForm({ ...form, name: e.target.value })} required />
               </div>
               <div>
                 <label className="form-label">Email Address</label>
                 <input className="input" type="email" placeholder="client@email.com"
                   value={form.email}
-                  onChange={e => setForm({...form, email: e.target.value})} />
+                  onChange={e => setForm({ ...form, email: e.target.value })} />
               </div>
               <div>
                 <label className="form-label">Phone Number</label>
-                <input className="input" placeholder="+91 98765 43210"
+                <input
+                  className="input"
+                  placeholder="10-digit mobile number"
                   value={form.phone}
-                  onChange={e => setForm({...form, phone: e.target.value})} />
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  inputMode="numeric"
+                  onChange={e => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 10)
+                    setForm({ ...form, phone: val })
+                  }}
+                />
+                {form.phone && form.phone.length > 0 && form.phone.length < 10 && (
+                  <p style={{ fontSize: '11px', color: 'var(--danger)', marginTop: '4px' }}>
+                    Phone number must be exactly 10 digits
+                  </p>
+                )}
               </div>
               <div>
                 <label className="form-label">Address</label>
                 <input className="input" placeholder="City, State"
                   value={form.address}
-                  onChange={e => setForm({...form, address: e.target.value})} />
+                  onChange={e => setForm({ ...form, address: e.target.value })} />
               </div>
               <div className="form-full">
                 <label className="form-label">Notes</label>
-                <textarea className="input" style={{height:'68px', resize:'vertical'}}
+                <textarea className="input" style={{ height: '68px', resize: 'vertical' }}
                   placeholder="Any additional notes about this client..."
                   value={form.notes}
-                  onChange={e => setForm({...form, notes: e.target.value})} />
+                  onChange={e => setForm({ ...form, notes: e.target.value })} />
               </div>
             </div>
             <div className={styles.formActions}>
@@ -230,7 +249,7 @@ export default function Clients() {
       {/* CLIENT GRID */}
       {filtered.length === 0 ? (
         <div className="empty-state">
-          <Person sx={{fontSize:52, color:'var(--text-muted)'}} className="empty-icon"/>
+          <Person sx={{ fontSize: 52, color: 'var(--text-muted)' }} className="empty-icon" />
           <p className="empty-title">
             {hasFilters ? 'No clients match your search' : 'No clients yet'}
           </p>
@@ -238,8 +257,8 @@ export default function Clients() {
             {hasFilters ? 'Try clearing filters' : 'Click Add Client to get started'}
           </p>
           {hasFilters && (
-            <button className="btn-ghost" style={{marginTop:8}} onClick={clearFilters}>
-              <Clear sx={{fontSize:14}}/> Clear Filters
+            <button className="btn-ghost" style={{ marginTop: 8 }} onClick={clearFilters}>
+              <Clear sx={{ fontSize: 14 }} /> Clear Filters
             </button>
           )}
         </div>
@@ -258,15 +277,15 @@ export default function Clients() {
                   <div className={styles.clientActions}>
                     <button className="icon-btn info" title="Link Case"
                       onClick={() => { setLinkModal(client); setSelectedCase('') }}>
-                      <LinkOutlined sx={{fontSize:15}}/>
+                      <LinkOutlined sx={{ fontSize: 15 }} />
                     </button>
                     <button className="icon-btn" title="Edit"
                       onClick={() => handleEdit(client)}>
-                      <Edit sx={{fontSize:14}}/>
+                      <Edit sx={{ fontSize: 14 }} />
                     </button>
                     <button className="icon-btn danger" title="Remove"
                       onClick={() => handleDelete(client._id)}>
-                      <Delete sx={{fontSize:14}}/>
+                      <Delete sx={{ fontSize: 14 }} />
                     </button>
                   </div>
                 </div>
@@ -277,19 +296,19 @@ export default function Clients() {
                 <div className={styles.clientInfo}>
                   {client.email && (
                     <div className={styles.infoRow}>
-                      <Email sx={{fontSize:13, color:'var(--text-muted)'}}/>
+                      <Email sx={{ fontSize: 13, color: 'var(--text-muted)' }} />
                       <span>{client.email}</span>
                     </div>
                   )}
                   {client.phone && (
                     <div className={styles.infoRow}>
-                      <Phone sx={{fontSize:13, color:'var(--text-muted)'}}/>
+                      <Phone sx={{ fontSize: 13, color: 'var(--text-muted)' }} />
                       <span>{client.phone}</span>
                     </div>
                   )}
                   {client.address && (
                     <div className={styles.infoRow}>
-                      <Home sx={{fontSize:13, color:'var(--text-muted)'}}/>
+                      <Home sx={{ fontSize: 13, color: 'var(--text-muted)' }} />
                       <span>{client.address}</span>
                     </div>
                   )}
@@ -322,19 +341,18 @@ export default function Clients() {
                           <span className={styles.caseDot} style={{
                             background:
                               c.status === 'Open' ? 'var(--primary-light)' :
-                              c.status === 'In Progress' ? 'var(--accent)' :
-                              'var(--success)'
-                          }}/>
+                                c.status === 'In Progress' ? 'var(--accent)' :
+                                  'var(--success)'
+                          }} />
                           <span className={styles.caseItemTitle}>{c.title}</span>
-                          <span className={`badge badge-${
-                            c.status === 'Open' ? 'open' :
+                          <span className={`badge badge-${c.status === 'Open' ? 'open' :
                             c.status === 'In Progress' ? 'progress' : 'closed'
-                          }`} style={{fontSize:'9px', padding:'1px 6px'}}>
+                            }`} style={{ fontSize: '9px', padding: '1px 6px' }}>
                             {c.status}
                           </span>
                           <button className={styles.unlinkBtn} title="Unlink case"
                             onClick={() => handleUnlinkCase(c._id)}>
-                            <Close sx={{fontSize:11}}/>
+                            <Close sx={{ fontSize: 11 }} />
                           </button>
                         </div>
                       ))}
@@ -356,7 +374,7 @@ export default function Clients() {
                 Link Case to {linkModal.name}
               </h3>
               <button className="icon-btn danger" onClick={() => setLinkModal(null)}>
-                <Close sx={{fontSize:16}}/>
+                <Close sx={{ fontSize: 16 }} />
               </button>
             </div>
             <div className={styles.modalBody}>
@@ -377,7 +395,7 @@ export default function Clients() {
                 }
               </select>
               {cases.filter(c => !c.clientId).length === 0 && (
-                <p style={{fontSize:'12px', color:'var(--text-muted)', marginTop:'8px'}}>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>
                   All cases are already linked to clients.
                 </p>
               )}
@@ -385,7 +403,7 @@ export default function Clients() {
                 <button className="btn-ghost" onClick={() => setLinkModal(null)}>Cancel</button>
                 <button className="btn-primary" onClick={handleLinkCase}
                   disabled={!selectedCase}>
-                  <LinkOutlined sx={{fontSize:14}}/> Link Case
+                  <LinkOutlined sx={{ fontSize: 14 }} /> Link Case
                 </button>
               </div>
             </div>

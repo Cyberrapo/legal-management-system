@@ -14,12 +14,16 @@ const storage = new CloudinaryStorage({
     const isPDF = file.mimetype === 'application/pdf'
     return {
       folder: 'legal-docs',
-      allowed_formats: ['jpg', 'png', 'pdf', 'docx'],
       resource_type: isPDF ? 'raw' : 'image',
-      public_id: `${Date.now()}-${file.originalname.replace(/\s+/g, '_')}`,
+      allowed_formats: ['jpg', 'jpeg', 'png', 'pdf', 'docx'],
+      public_id: `${Date.now()}_${file.originalname.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._-]/g, '')}`,
     }
   }
 })
 
-const upload = multer({ storage })
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+})
+
 module.exports = { cloudinary, upload }
