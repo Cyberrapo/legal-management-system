@@ -15,8 +15,6 @@ const storage = new CloudinaryStorage({
                   file.mimetype.includes('spreadsheet') ||
                   file.mimetype.includes('presentation') ||
                   file.mimetype.includes('text') ||
-                  file.mimetype === 'application/pdf' ||
-                  file.originalname.endsWith('.pdf') ||
                   file.originalname.endsWith('.docx') ||
                   file.originalname.endsWith('.doc')
     return {

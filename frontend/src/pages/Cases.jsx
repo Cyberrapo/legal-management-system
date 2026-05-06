@@ -171,7 +171,16 @@ export default function Cases() {
     if (!doc || !doc.url) return ''
     let secureUrl = doc.url.replace('http://', 'https://')
     const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
-    if (isPDF && !secureUrl.endsWith('.pdf')) secureUrl += '.pdf'
+    
+    if (isPDF) {
+      if (secureUrl.includes('/raw/upload/')) {
+        // Raw Cloudinary PDFs force download, breaking iframes. We route them through Google Docs Viewer.
+        return `https://docs.google.com/gview?url=${encodeURIComponent(secureUrl)}&embedded=true`
+      }
+      if (!secureUrl.endsWith('.pdf')) {
+        secureUrl += '.pdf'
+      }
+    }
     return secureUrl
   }
 
