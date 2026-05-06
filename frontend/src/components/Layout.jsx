@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import PeopleIcon from '@mui/icons-material/People'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import DashboardIcon from '@mui/icons-material/Dashboard'
@@ -26,7 +25,6 @@ import styles from './Layout.module.css'
 export default function Layout() {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   useNotifications()

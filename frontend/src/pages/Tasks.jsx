@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
   Add, Close, Edit, Delete, CheckCircle,
   RadioButtonUnchecked, Flag, CalendarToday,
@@ -45,7 +44,6 @@ const getDueLabel = (date) => {
 }
 
 export default function Tasks() {
-  const { t } = useTranslation()
   const [tasks, setTasks] = useState([])
   const [form, setForm] = useState(empty)
   const [showForm, setShowForm] = useState(false)
