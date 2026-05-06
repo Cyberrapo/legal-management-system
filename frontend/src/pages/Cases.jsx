@@ -189,13 +189,6 @@ export default function Cases() {
     let secureUrl = doc.url.replace('http://', 'https://')
     const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
     if (isPDF && !secureUrl.endsWith('.pdf')) secureUrl += '.pdf'
-    
-    if (secureUrl.includes('/image/upload/')) {
-      return secureUrl.replace('/image/upload/', '/image/upload/fl_attachment/')
-    }
-    if (secureUrl.includes('/video/upload/')) {
-      return secureUrl.replace('/video/upload/', '/video/upload/fl_attachment/')
-    }
     return secureUrl
   }
 
