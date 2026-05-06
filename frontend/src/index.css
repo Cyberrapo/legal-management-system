@@ -42,9 +42,9 @@ body {
   --border: rgba(108, 99, 255, 0.18);
   --border-hover: rgba(108, 99, 255, 0.35);
 
-  --text-primary: #f0f0ff;
-  --text-secondary: #a0a0c0;
-  --text-muted: #606080;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #cbd5e1;
 
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-hover: 0 16px 48px rgba(108, 99, 255, 0.25);
@@ -84,9 +84,9 @@ body {
   --border-hover: rgba(91, 82, 240, 0.4);
 
   /* DARK TEXT — clearly visible in screenshots */
-  --text-primary: #0a0a1a;
-  --text-secondary: #1a1a3a;
-  --text-muted: #3a3a5a;
+  --text-primary: #000000;
+  --text-secondary: #1a202c;
+  --text-muted: #2d3748;
 
   --shadow: 0 8px 32px rgba(91, 82, 240, 0.1);
   --shadow-hover: 0 16px 48px rgba(91, 82, 240, 0.2);
@@ -458,22 +458,22 @@ body {
 [data-theme="light"] h1,
 [data-theme="light"] h2,
 [data-theme="light"] h3 {
-  color: #0a0a1a;
+  color: #000000;
 }
 
 [data-theme="light"] .input {
-  color: #0a0a1a;
+  color: #000000;
   background: #ffffff;
-  border-color: rgba(91, 82, 240, 0.25);
+  border-color: rgba(91, 82, 240, 0.4);
 }
 
 [data-theme="light"] .input::placeholder {
-  color: #6a6a8a;
+  color: #4a5568;
 }
 
 [data-theme="light"] select option {
   background: #ffffff;
-  color: #0a0a1a;
+  color: #000000;
 }
 
 [data-theme="light"] .card {
@@ -486,7 +486,7 @@ body {
 }
 
 [data-theme="light"] .metaItem {
-  color: #1a1a3a !important;
+  color: #000000 !important;
   background: #f0f0ff;
   border-color: rgba(91, 82, 240, 0.2);
 }
