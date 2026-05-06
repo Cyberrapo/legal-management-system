@@ -11,11 +11,10 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
-    const isPDF = file.mimetype === 'application/pdf'
+    const isMedia = file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')
     return {
       folder: 'legal-docs',
-      resource_type: isPDF ? 'raw' : 'image',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'pdf', 'docx'],
+      resource_type: isMedia ? 'auto' : 'raw',
       public_id: `${Date.now()}_${file.originalname.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._-]/g, '')}`,
     }
   }

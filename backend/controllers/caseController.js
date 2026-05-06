@@ -19,7 +19,9 @@ const createCase = async (req, res) => {
       const hDate = hearingTime
         ? new Date(`${hearingDate}T${hearingTime}`)
         : new Date(hearingDate)
-      if (hDate < new Date())
+      const now = new Date()
+      if (!hearingTime) now.setHours(0, 0, 0, 0)
+      if (hDate < now)
         return res.status(400).json({ message: 'Hearing date cannot be in the past' })
     }
 
@@ -52,7 +54,9 @@ const updateCase = async (req, res) => {
       const hDate = req.body.hearingTime
         ? new Date(`${req.body.hearingDate}T${req.body.hearingTime}`)
         : new Date(req.body.hearingDate)
-      if (hDate < new Date())
+      const now = new Date()
+      if (!req.body.hearingTime) now.setHours(0, 0, 0, 0)
+      if (hDate < now)
         return res.status(400).json({ message: 'Hearing date cannot be in the past' })
     }
 

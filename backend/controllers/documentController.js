@@ -44,9 +44,11 @@ const deleteDocument = async (req, res) => {
 
     // Delete from Cloudinary
     try {
-      const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
+      const isVideo = doc.fileType?.startsWith('video/')
+      const isImage = doc.fileType?.startsWith('image/')
+      const resType = isVideo ? 'video' : isImage ? 'image' : 'raw'
       await cloudinary.uploader.destroy(doc.publicId, {
-        resource_type: isPDF ? 'raw' : 'image'
+        resource_type: resType
       })
     } catch (cloudErr) {
       console.log('Cloudinary delete note:', cloudErr.message)
