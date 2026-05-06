@@ -11,10 +11,17 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
-    const isMedia = file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')
+    const isRaw = file.mimetype.includes('wordprocessing') || 
+                  file.mimetype.includes('spreadsheet') ||
+                  file.mimetype.includes('presentation') ||
+                  file.mimetype.includes('text') ||
+                  file.mimetype === 'application/pdf' ||
+                  file.originalname.endsWith('.pdf') ||
+                  file.originalname.endsWith('.docx') ||
+                  file.originalname.endsWith('.doc')
     return {
       folder: 'legal-docs',
-      resource_type: isMedia ? 'auto' : 'raw',
+      resource_type: isRaw ? 'raw' : 'auto',
       public_id: `${Date.now()}_${file.originalname.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._-]/g, '')}`,
     }
   }

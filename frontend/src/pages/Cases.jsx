@@ -167,10 +167,20 @@ export default function Cases() {
   const hasFilters = search || filterStatus !== 'All' || filterType !== 'All'
   const clearFilters = () => { setSearch(''); setFilterStatus('All'); setFilterType('All') }
 
-  const getDocUrl = (url) => url ? url.replace('http://', 'https://') : ''
-  const getDownloadUrl = (url) => {
-    if (!url) return ''
-    const secureUrl = url.replace('http://', 'https://')
+  const getDocUrl = (doc) => {
+    if (!doc || !doc.url) return ''
+    let secureUrl = doc.url.replace('http://', 'https://')
+    const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
+    if (isPDF && !secureUrl.endsWith('.pdf')) secureUrl += '.pdf'
+    return secureUrl
+  }
+
+  const getDownloadUrl = (doc) => {
+    if (!doc || !doc.url) return ''
+    let secureUrl = doc.url.replace('http://', 'https://')
+    const isPDF = doc.fileType === 'application/pdf' || doc.name?.endsWith('.pdf')
+    if (isPDF && !secureUrl.endsWith('.pdf')) secureUrl += '.pdf'
+    
     if (secureUrl.includes('/image/upload/')) {
       return secureUrl.replace('/image/upload/', '/image/upload/fl_attachment/')
     }
@@ -490,7 +500,7 @@ export default function Cases() {
                             onClick={() => setViewingDoc(doc)}>
                             <Eye size={13} />
                           </button>
-                          <a href={getDownloadUrl(doc.url)} download
+                          <a href={getDownloadUrl(doc)} download
                             target="_blank" rel="noreferrer"
                             className="icon-btn success"
                             title="Download document">
@@ -547,7 +557,7 @@ export default function Cases() {
                 <span className={styles.modalTitle}>{viewingDoc.name}</span>
               </div>
               <div className={styles.modalHeaderActions}>
-                <a href={getDownloadUrl(viewingDoc.url)} download target="_blank"
+                <a href={getDownloadUrl(viewingDoc)} download target="_blank"
                   rel="noreferrer" className="icon-btn success" title="Download">
                   <Download size={15} />
                 </a>
@@ -561,14 +571,14 @@ export default function Cases() {
               {viewingDoc.fileType === 'application/pdf' ||
                 viewingDoc.name?.endsWith('.pdf') ? (
                 <iframe
-                  src={getDocUrl(viewingDoc.url)}
+                  src={getDocUrl(viewingDoc)}
                   title={viewingDoc.name}
                   className={styles.pdfFrame}
                 />
               ) : viewingDoc.fileType?.startsWith('image/') ||
                 viewingDoc.name?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
                 <img
-                  src={getDocUrl(viewingDoc.url)}
+                  src={getDocUrl(viewingDoc)}
                   alt={viewingDoc.name}
                   className={styles.imgPreview}
                 />
@@ -576,7 +586,7 @@ export default function Cases() {
                 <div className={styles.unsupported}>
                   <File size={52} strokeWidth={1} />
                   <p>Preview not available for this file type</p>
-                  <a href={getDocUrl(viewingDoc.url)} target="_blank"
+                  <a href={getDocUrl(viewingDoc)} target="_blank"
                     rel="noreferrer" className="btn-primary">
                     <Download size={14} /> Open File
                   </a>
